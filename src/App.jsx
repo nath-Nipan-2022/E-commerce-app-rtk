@@ -1,10 +1,10 @@
 // import { Outlet } from "react-router-dom";
-// import ErrorPage from "./pages/ErrorPage.jsx";
 
 import Header from "./components/Header";
 import Home from "./pages/Home.jsx";
 import Cart from "./pages/Cart.jsx";
 import Account from "./pages/Account";
+import ErrorPage from "./pages/ErrorPage.jsx";
 import { RouterProvider, Outlet, createBrowserRouter } from "react-router-dom";
 import ProductView from "./pages/ProductView";
 import ProductsList from "./components/ProductsList";
@@ -24,6 +24,7 @@ const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <Layout />,
+		errorElement: <ErrorPage />,
 		children: [
 			{
 				path: "/",
