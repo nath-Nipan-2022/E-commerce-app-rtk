@@ -1,4 +1,3 @@
-import Button from "../components/Button";
 import ProductsList from "../components/ProductsList";
 import Slider from "../components/Slider";
 // import { useState } from "react";
@@ -11,7 +10,7 @@ function Home() {
 			</section>
 
 			<section className="mx-auto max-w-2xl py-16 lg:max-w-7xl">
-				<h2 className="text-2xl font-medium mb-8">Products For You</h2>
+				<h2 className="text-2xl font-medium mb-8">Trending Products For You</h2>
 				<ProductsList />
 			</section>
 		</div>
