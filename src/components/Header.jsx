@@ -8,6 +8,14 @@ import Navbar from "./Navbar";
 
 function Header() {
 	const [openMenu, setOpenMenu] = useState(false);
+	
+	const linksWithIcon = [{
+		path: '/account', label: 'Account', icon: <GoPerson />,
+	},
+	{
+		path: '/cart', label: 'Cart', icon: <BsCart2 />,
+	},
+	];
 
 	const onMenuClose = () => {
 		setOpenMenu((prev) => !prev);
@@ -27,14 +35,12 @@ function Header() {
 			<SearchForm />
 
 			<div className="flex items-center gap-4 font-medium">
-				<Link to={"/account"} className="flex items-center gap-2">
-					<GoPerson />
-					<span>Account</span>
-				</Link>
-				<Link to={"/cart"} className="flex items-center gap-2">
-					<BsCart2 />
-					<span>Cart</span>
-				</Link>
+				{
+					linksWithIcon.map(link => <Link to={link.path} key={link.label} className="flex items-center gap-2">
+						{link.icon}
+						<span>{link.label}</span>
+					</Link>)
+				}
 				<BsMenuApp
 					className="block cursor-pointer md:hidden"
 					onClick={onMenuClose}
