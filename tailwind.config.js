@@ -29,6 +29,9 @@ export default {
 				shimmer: "shimmer 1.5s infinite",
 				popUp: "popUp .3s forwards",
 			},
+			gridTemplateColumns: {
+				dropdown: "220px minmax(220px, 1fr) 220px",
+			},
 		},
 	},
 
