@@ -3,11 +3,11 @@ import classNames from "classnames";
 
 function Skeleton({ times, className }) {
 	const classes = classNames(
-		"bg-gradient-to-r from-0% from-gray-200 via-20% via-gray-100 to-100% to-gray-300 bg-x-dbl-y-full animate-shimmer",
+		"relative bg-[#f7f7f7] overflow-hidden before:absolute before:content-[''] before:bg-gradient-to-r before:from-transparent before:via-[#ebebeb] before:to-transparent before:-translate-x-full before:animate-shimmer before:w-full before:h-full before:top-0 before:left-0",
 		className
 	);
 
-	const totalNodes = Array.from({ length: times }, (_, i) => {
+	const totalNodes = Array.from({ length: times || 1 }, (_, i) => {
 		return <div key={i} className={classes}></div>;
 	});
 

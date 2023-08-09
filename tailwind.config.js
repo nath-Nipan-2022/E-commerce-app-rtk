@@ -3,19 +3,14 @@ export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
 		extend: {
-			colors: {
-				skeleton: {
-					400: `rgb(0,0,0,0.25)`,
-					500: `rgba(0,0,0,0.5)`,
-				},
-			},
-			backgroundSize: {
-				"x-dbl-y-full": "200% 100%",
-			},
+			// backgroundImage: {
+			// 	skeleton:
+			// 		"background: linear-gradient(90deg, transparent,#ebebeb,transparent)",
+			// },
 			keyframes: {
 				shimmer: {
 					"100%": {
-						backgroundPosition: "-150% 0%",
+						transform: "translateX(100%)",
 					},
 				},
 				popUp: {
