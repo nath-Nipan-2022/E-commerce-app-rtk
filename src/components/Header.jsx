@@ -1,5 +1,6 @@
 import { GoPerson } from "react-icons/go";
-import { BsMenuApp, BsCart2 } from "react-icons/bs";
+import { BsCart2 } from "react-icons/bs";
+import { FiMenu } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import SearchForm from "./SearchForm";
 import logo from "../assets/shopping logo.png";
@@ -8,13 +9,26 @@ import Navbar from "./Navbar";
 
 function Header() {
 	const [openMenu, setOpenMenu] = useState(false);
-	
-	const linksWithIcon = [{
-		path: '/account', label: 'Account', icon: <GoPerson />,
-	},
-	{
-		path: '/cart', label: 'Cart', icon: <BsCart2 />,
-	},
+	const [cartQuantity, setCartQuantity] = useState(2);
+
+	const linksWithIcon = [
+		{
+			path: "/account",
+			label: "Account",
+			icon: <GoPerson />,
+		},
+		{
+			path: "/cart",
+			label: "Cart",
+			icon: (
+				<div className="relative">
+					<BsCart2 />{" "}
+					<span className="absolute -top-1/2 -right-1/2 w-4 h-4 font-bold text-[10px] grid place-items-center rounded-full bg-blue-600 text-white">
+						{cartQuantity}
+					</span>
+				</div>
+			),
+		},
 	];
 
 	const onMenuClose = () => {
@@ -22,7 +36,7 @@ function Header() {
 	};
 
 	return (
-		<header className="flex justify-between items-center p-2">
+		<header className="flex justify-between md:justify-evenly lg:justify-between items-center p-2">
 			<div>
 				<Link to={"/"} className="flex items-center font-medium">
 					<img src={logo} alt="company logo" width={56} />
@@ -32,17 +46,21 @@ function Header() {
 
 			<Navbar openMenu={openMenu} onClose={onMenuClose} />
 
-			<SearchForm />
+			<SearchForm className={"sm:w-60 ml-auto sm:ml-0 lg:w-auto"} />
 
 			<div className="flex items-center gap-4 font-medium">
-				{
-					linksWithIcon.map(link => <Link to={link.path} key={link.label} className="flex items-center gap-2">
+				{linksWithIcon.map((link) => (
+					<Link
+						to={link.path}
+						key={link.label}
+						className="flex items-center gap-2 p-1 px-1.5 rounded"
+					>
 						{link.icon}
-						<span>{link.label}</span>
-					</Link>)
-				}
-				<BsMenuApp
-					className="block cursor-pointer md:hidden"
+						<span className="hidden lg:inline-block">{link.label}</span>
+					</Link>
+				))}
+				<FiMenu
+					className="block cursor-pointer lg:hidden ml-1"
 					onClick={onMenuClose}
 				/>
 			</div>
