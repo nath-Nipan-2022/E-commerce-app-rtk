@@ -1,42 +1,36 @@
-import { useDispatch, useSelector } from "react-redux";
-import { removeCart } from "../store";
+import { useSelector } from "react-redux";
+import { GoX } from "react-icons/go";
 
 import Cart from "./Cart";
-function CartList({ className }) {
+function CartList({ className, onClose }) {
 	const carts = useSelector((state) => state.carts.list);
-	const dispatch = useDispatch();
 
-	const deleteCart = (cart) => dispatch(removeCart(cart));
-
-	const total = carts.reduce((total, { price }) => {
-		return total + +price;
+	const total = carts.reduce((total, { price, quantity }) => {
+		return total + +price * quantity;
 	}, 0);
 
-	// console.log(JSON.stringify(carts));
-
 	const renderCarts = carts.map((cart, i) => {
-		return (
-			<Cart
-				key={i}
-				className={"p-2 rounded cursor-pointer bg-white"}
-				item={cart}
-				onRemove={deleteCart}
-			/>
-		);
+		return <Cart key={i} className={"py-4"} cartItem={cart} />;
 	});
 
 	return (
 		<div
-			className={`fixed z-20 h-full w-72 pt-8 p-3 bg-white top-0 right-0 translate-x-full animate-popUp`}
+			className={`fixed z-20 h-full w-80 bg-white shadow top-0 right-0 translate-x-full animate-popUp overflow-y-auto`}
 		>
-			<h2 className="mb-4 text-slate-700 font-semibold">
-				Your Carts are waiting! 🚀
-			</h2>
-			<div className="flex flex-col divide-y gap-2">{renderCarts}</div>
-
-			<div className="mt-4">
-				Total : <span className="font-bold text-blue-800">${total}</span>
-			</div>
+			<article className="p-4">
+				<div
+					onClick={onClose}
+					className="bg-white border cursor-pointer hover:bg-gray-200 w-8 h-8 grid place-items-center rounded-full"
+				>
+					<GoX className="text-gray-600" />
+				</div>
+				<h2 className="my-2 font-medium">Order Summery</h2>
+				<div>{renderCarts}</div>
+			</article>
+			<article className="sticky bottom-0 bg-white border-t p-4 font-medium text-lg flex items-center justify-between">
+				<span>Total</span>
+				<span>${total.toFixed(2)}</span>
+			</article>
 		</div>
 	);
 }
