@@ -12,7 +12,7 @@ function Home() {
 
 			<section className="mx-auto max-w-2xl py-16 lg:max-w-7xl">
 				<h2 className="text-2xl font-medium mb-8">Trending Products For You</h2>
-				<ProductsList type='trending' />
+				<ProductsList type="trending" />
 			</section>
 
 			<section>
@@ -21,7 +21,7 @@ function Home() {
 
 			<section className="mx-auto max-w-2xl py-16 lg:max-w-7xl">
 				<h2 className="text-2xl font-medium mb-8">Most Bought Products</h2>
-				<ProductsList type="popular" />
+				<ProductsList type="featured" />
 			</section>
 		</div>
 	);
