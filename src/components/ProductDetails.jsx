@@ -7,10 +7,13 @@ import Wishlist from "./Wishlist";
 import { useDispatch } from "react-redux";
 import { addCart } from "../store/slices/cartsSlice";
 import Counter from "./Counter";
+import ProductImage from "./ProductImage";
 
 function ProductDetails({ product }) {
 	const [imageIndex, setImageIndex] = useState(0);
 	const [quantity, setQuantity] = useState(1);
+	const { name, price, images, desc } = product.attributes;
+	const [review, setReview] = useState(4);
 
 	const dispatch = useDispatch();
 	const addToCart = () => {
@@ -28,32 +31,28 @@ function ProductDetails({ product }) {
 	const decrement = () => {
 		setQuantity((prev) => prev - 1);
 	};
-
-	const renderImgBoxes = product.images.map((imageUrl, i) => (
-		<figure
+	const renderImgBoxes = images.data.map((image, i) => (
+		<ProductImage
 			key={i}
-			onClick={() => setImageIndex(i)}
-			className="cursor-pointer border aspect-square w-28 bg-gray-200 rounded-md group"
-		>
-			<img
-				src={imageUrl}
-				alt={product.altText}
-				className="group-hover:scale-95 transition w-full aspect-square object-cover"
-			/>
-		</figure>
+			url={image.attributes.url}
+			alt={desc}
+			className="cursor-pointer group w-1/4 lg:w-full lg:h-1/4"
+			onMouseEnter={() => setImageIndex(i)}
+		/>
 	));
 
 	const renderReviews = Array(5)
 		.fill(0)
 		.map((_, i) => {
-			if (i < 4) {
-				return <GoStarFill key={i} />;
-			} else {
-				return <GoStar key={i} />;
-			}
+			return (
+				<GoStarFill
+					key={i}
+					className={`${i < review ? "text-yellow-500" : "text-gray-300"}`}
+				/>
+			);
 		});
 
-	const renderColorBoxes = Array(5)
+	const renderColorBoxes = Array(4)
 		.fill(0)
 		.map((_, i) => {
 			return (
@@ -61,40 +60,31 @@ function ProductDetails({ product }) {
 				<Button
 					key={i}
 					className={
-						"w-8 h-8 rounded-full outline outline-gray-300 outline-offset-2 bg-gray-300 hover:outline-slate-700 hover:bg-rose-500 border-0"
+						"w-8 h-8 rounded-full outline outline-gray-300 outline-offset-2 bg-gray-300 hover:outline-rose-400 hover:bg-rose-300 border-0"
 					}
 				/>
 			);
 		});
 
 	return (
-		<section className="md:px-6 flex flex-col gap-6 sm:gap-12 md:flex-row">
-			{/* Left Section */}
-			<section className="pt-2 md:w-1/2">
-				<div className="relative rounded-md grid place-items-center bg-gray-200 border">
-					<figure className="w-full aspect-square min-h-[290px]">
-						<img
-							src={product.images[imageIndex]}
-							alt={product.altText}
-							width={300}
-							height={300}
-							className="object-cover w-full h-full rounded"
-						/>
-					</figure>
+		<section className="flex flex-col gap-6 lg:gap-12 md:flex-row">
+			{/* Left Section special classNames */}
+			<section className={`md:w-1/2 flex items-start flex-col lg:flex-row-reverse lg:gap-4`}>
+				<div className="relative pb-4 flex-1">
+					<ProductImage
+						url={images.data[imageIndex].attributes.url}
+						product={product.attributes}
+					/>
 					<Wishlist productCard={product} />
 				</div>
-				<div className="mt-6 flex gap-2 lg:gap-10 justify-between ">
-					{renderImgBoxes}
-				</div>
+				{/* Images column special classNames*/}
+				<div className="flex gap-2 justify-between lg:flex-col lg:w-20">{renderImgBoxes}</div>
 			</section>
 			{/* Right Section */}
-			<section className="md:w-2/5">
+			<section>
 				<Panel className={"pb-4"}>
-					<h2 className="text-2xl font-medium">{product.name}</h2>
-					<p className="text-gray-600 py-2">
-						A perfect balance of exhilarating high-fidelity audio and the
-						effortless magic of {product.name}
-					</p>
+					<h2 className="text-2xl font-medium">{name}</h2>
+					<p className="text-gray-600 py-2">{desc}</p>
 					<div className="flex gap-2">
 						<span className="flex gap-1 items-center py-1">
 							{renderReviews}
@@ -103,15 +93,15 @@ function ProductDetails({ product }) {
 					</div>
 				</Panel>
 
-				<Panel className={"border-t py-4"}>
-					<h3 className="text-lg font-semibold">${product.price}</h3>
+				<Panel className={"border-t py-2"}>
+					<h3 className="text-lg">${price}</h3>
 					<p className="text-gray-600 py-1">
 						Suggested payments with 6 months special financing.
 					</p>
 				</Panel>
 
-				<Panel className="border-t py-4">
-					<h3 className="font-semibold">Choose a color</h3>
+				<Panel className="border-t py-2">
+					<h3 className="font-medium">Choose a color</h3>
 					<div className="py-4 flex gap-3">{renderColorBoxes}</div>
 				</Panel>
 
