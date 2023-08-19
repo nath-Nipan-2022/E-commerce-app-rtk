@@ -1,24 +1,13 @@
 import { useEffect, useState } from "react";
-// import Button from "./Button";
-import img1 from "../assets/slider/photo-1623682490567-941cdfca10a4-removebg-preview.png";
-import img2 from "../assets/slider/photo-1593359863503-f598684c806f-removebg-preview.png";
-import img3 from "../assets/slider/photo-1545127398-14699f92334b-removebg-preview.png";
-import img4 from "../assets/slider/photo-1625786682948-2168238883d2-removebg-preview.png";
 import { Link } from "react-router-dom";
+import ProductImage from "./ProductImage";
 
-function Slider() {
-	const slides = [
-		{ id: 0, src: img1, alt: "headphone on head of a women" },
-		{ id: 1, src: img2, alt: "headphone on head of a women" },
-		{ id: 2, src: img3, alt: "headphone on head of a men" },
-		{ id: 3, src: img4, alt: "headphone on floor" },
-	];
-
+function Slider({ images, className }) {
 	const [currentSlide, setCurrentSlide] = useState(0);
 
 	useEffect(() => {
 		let timer = setInterval(() => {
-			if (currentSlide >= slides.length - 1) {
+			if (currentSlide >= images.length - 1) {
 				setCurrentSlide(0);
 			} else {
 				setCurrentSlide((prev) => prev + 1);
@@ -26,19 +15,18 @@ function Slider() {
 		}, 5000);
 
 		return () => clearInterval(timer);
-	}, [currentSlide, slides.length]);
+	}, [currentSlide, images.length]);
 
-	const renderSlides = slides.map((slide) => (
+	const renderSlides = images.map((slide) => (
 		<div
 			key={slide.id}
-			className="flex justify-evenly items-center"
-			style={{ width: 100 / slides.length + "%" }}
+			className={`flex justify-evenly items-center ${className}`}
+			style={{ width: 100 / images.length + "%" }}
 		>
-			<div className="p-3 md:p-6">
-				<h3 className="font-bold text-lg leading-6 sm:text-3xl lg:text-4xl text-slate-700 mb-3 md:mb-6">
-					Grab Upto 50% Off On
-					<br />
-					Selected Products
+			<div className="p-2 py-6 md:p-6">
+				<h3 className="font-bold text-[4vw] md:text-3xl lg:text-4xl text-slate-700 mb-3 md:mb-6">
+					Grab Upto <span className="text-white drop-shadow-lg">50% </span>
+					Off <span className="block">On Selected Products</span>
 				</h3>
 				<Link
 					to={"/"}
@@ -48,18 +36,22 @@ function Slider() {
 				</Link>
 			</div>
 
-			<figure className="w-1/4 lg:p-4">
-				<img className="h-full" src={slide.src} alt={slide.alt} />
-			</figure>
+			<div className="p-4 lg:p-6 w-32 sm:w-1/4">
+				<ProductImage
+					className="aspect-auto rounded-2xl shadow-lg"
+					url={slide.attributes.url}
+					alt={"slider image"}
+				/>
+			</div>
 		</div>
 	));
 
 	return (
 		<div
-			className="flex transition duration-1000 max-h-64"
+			className="flex transition duration-1000"
 			style={{
-				width: slides.length * 100 + "%",
-				transform: `translateX(-${currentSlide * (100 / slides.length)}%)`,
+				width: images.length * 100 + "%",
+				transform: `translateX(-${currentSlide * (100 / images.length)}%)`,
 			}}
 		>
 			{renderSlides}
