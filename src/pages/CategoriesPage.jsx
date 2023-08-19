@@ -95,32 +95,47 @@ function CategoriesPage() {
 		return <ProductsListItem key={product.id} product={product} />;
 	});
 
-	const maximumPrice = products?.data.reduce((acc, curr) => {
-		return Math.max(acc,curr.attributes.price);
-	},0);
-
 	return (
-		<div className="flex gap-4 flex-col-reverse lg:flex-row items-start">
-			<FilterPanel
-				subCats={subCats}
-				onSubCatsChange={handleSubCatsChange}
-				showPanel={showPanel}
-				setShowFilterPanel={setShowFilterPanel}
-				maximumPrice={maximumPrice}
-				setPriceRange={setPriceRange}
-				setPriceOrder={setPriceOrder}
-				setRatings={setRatings}
-			/>
-
-			<div className="px-2">
-				<section className=" bg-fuchsia-300 mx-auto rounded-lg overflow-hidden">
-					<Slider className={"max-h-52"} />
+		<div>
+			<div>
+				{showPanel && (
+					<div
+						className="fixed inset-0 z-20 bg-black/50"
+						onClick={() => setShowFilterPanel(false)}
+					></div>
+				)}
+				<FilterPanel
+					products={products}
+					subCats={subCats}
+					onSubCatsChange={handleSubCatsChange}
+					setPriceRange={setPriceRange}
+					setPriceOrder={setPriceOrder}
+					setRatings={setRatings}
+					className={`w-52 fixed z-20 left-0 top-0 h-screen bg-white shadow-xl lg:shadow-sm lg:absolute lg:z-0 lg:left-auto lg:top-auto lg:h-auto lg:translate-x-0 transition duration-300 ${
+						showPanel ? "translate-x-0" : "-translate-x-full duration-200"
+					}`}
+				/>
+			</div>
+			{/* Crucial styles ⭐⭐ */}
+			<div className="lg:ml-52 lg:pl-4">
+				<section className="w-full bg-fuchsia-300 rounded-lg overflow-hidden">
+					{isLoading ? (
+					<Skeleton className={"w-full h-52 border"} />
+					) : (
+						<Slider
+							images={products.data[0].attributes.images.data}
+							className={"lg:max-h-52"}
+						/>
+					)}
 				</section>
 				<section className="mx-auto">
 					<h2 className="my-6 flex justify-between items-center">
 						<span className="text-2xl font-medium">Trending {name} For You</span>
 						{/* FilterPanel Toggler */}
-						<Button className="bg-rose-100/50 lg:hidden py-1 px-3.5 rounded-3xl gap-1" onClick={() => setShowFilterPanel(true)}>
+						<Button
+							className="bg-rose-100/50 lg:hidden py-1 px-3.5 rounded-3xl gap-2"
+							onClick={() => setShowFilterPanel(true)}
+						>
 							<GoFilter/>
 							<span>Filter</span>
 						</Button>
