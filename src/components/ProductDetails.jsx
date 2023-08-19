@@ -8,12 +8,12 @@ import { useDispatch } from "react-redux";
 import { addCart } from "../store/slices/cartsSlice";
 import Counter from "./Counter";
 import ProductImage from "./ProductImage";
+import ReviewsStars from "./ReviewsStars";
 
 function ProductDetails({ product }) {
 	const [imageIndex, setImageIndex] = useState(0);
 	const [quantity, setQuantity] = useState(1);
-	const { name, price, images, desc } = product.attributes;
-	const [review, setReview] = useState(4);
+	const { name, desc, price, reviews, ratings, images } = product.attributes;
 
 	const dispatch = useDispatch();
 	const addToCart = () => {
@@ -41,17 +41,6 @@ function ProductDetails({ product }) {
 		/>
 	));
 
-	const renderReviews = Array(5)
-		.fill(0)
-		.map((_, i) => {
-			return (
-				<GoStarFill
-					key={i}
-					className={`${i < review ? "text-yellow-500" : "text-gray-300"}`}
-				/>
-			);
-		});
-
 	const renderColorBoxes = Array(4)
 		.fill(0)
 		.map((_, i) => {
@@ -69,28 +58,28 @@ function ProductDetails({ product }) {
 	return (
 		<section className="flex flex-col gap-6 lg:gap-12 md:flex-row">
 			{/* Left Section special classNames */}
-			<section className={`md:w-1/2 flex items-start flex-col lg:flex-row-reverse lg:gap-4`}>
-				<div className="relative pb-4 flex-1">
+			<section
+				className={`md:w-1/2 flex flex-col lg:flex-row-reverse lg:items-start lg:gap-4`}
+			>
+				<div className="relative pb-4 lg:flex-1 lg:max-h-screen">
 					<ProductImage
 						url={images.data[imageIndex].attributes.url}
-						product={product.attributes}
+						alt={product.attributes.desc}
+						className={'w-full max-h-76 sm:max-h-fit'}
 					/>
 					<Wishlist productCard={product} />
 				</div>
 				{/* Images column special classNames*/}
-				<div className="flex gap-2 justify-between lg:flex-col lg:w-20">{renderImgBoxes}</div>
+				<div className="flex gap-2 justify-between lg:flex-col lg:w-20">
+					{renderImgBoxes}
+				</div>
 			</section>
 			{/* Right Section */}
 			<section>
 				<Panel className={"pb-4"}>
 					<h2 className="text-2xl font-medium">{name}</h2>
 					<p className="text-gray-600 py-2">{desc}</p>
-					<div className="flex gap-2">
-						<span className="flex gap-1 items-center py-1">
-							{renderReviews}
-						</span>
-						<span className="p-1">(122 reviews)</span>
-					</div>
+					<ReviewsStars ratings={ratings} reviews={reviews}/>
 				</Panel>
 
 				<Panel className={"border-t py-2"}>
