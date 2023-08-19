@@ -5,9 +5,10 @@ import Wishlist from "./Wishlist";
 import { useDispatch } from "react-redux";
 import { addCart } from "../store";
 import ProductImage from "./ProductImage";
+import ReviewsStars from "./ReviewsStars";
 
 function ProductsListItem({ product }) {
-	const { name, price, images } = product.attributes;
+	const { name, price, reviews, ratings, images } = product.attributes;
 
 	const [quantity, setQuantity] = useState(1);
 	const dispatch = useDispatch();
@@ -24,18 +25,17 @@ function ProductsListItem({ product }) {
 	};
 
 	return (
-		<div className="relative group">
+		<div className="relative group cursor-pointer lg:hover:ring lg:hover:ring-slate-100 lg:p-2 lg:pb-3 rounded-md">
 			<Link to={`products/${product.id}`}>
 				<ProductImage product={product} url={images.data[0].attributes.url} />
-				<article className="font-medium">
-					<h3 className="text-lg my-2 text-gray-700">{name}</h3>
-					<p className="text-lg mb-2 md:text-xl text-slate-700">
-						${price}
-					</p>
+				<article className="font-medium lg:px-2 text-gray-800">
+					<h3 className="leading-snug lg:text-lg mt-2">{name}</h3>
+					<ReviewsStars reviews={reviews} ratings={ratings} />
+					<p className="text-lg mb-2 text-slate-700">${price}</p>
 				</article>
 			</Link>
 			<Button
-				className="mt-2 hover:bg-slate-900 hover:border-slate-900 hover:text-white py-1.5 px-3 sm:px-4 text-xs lg:text-base rounded-lg border border-gray-300"
+				className="lg:m-2 hover:bg-slate-900 hover:border-slate-900 hover:text-white py-1.5 px-3 sm:px-4 text-xs lg:text-base rounded-lg border border-gray-300 active:scale-95 transition"
 				onClick={addToCart}
 			>
 				Add to Cart
