@@ -1,23 +1,32 @@
-// import { Outlet } from "react-router-dom";
-
+import { useEffect } from "react";
 import Header from "./components/Header";
 import Home from "./pages/Home.jsx";
-import Cart from "./pages/Cart.jsx";
 import Account from "./pages/Account";
 import ErrorPage from "./pages/ErrorPage.jsx";
-import { RouterProvider, Outlet, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, Outlet, createBrowserRouter ,useLocation} from "react-router-dom";
 import ProductView from "./pages/ProductView";
-import ProductsList from "./components/ProductsList";
 import Footer from "./components/Footer";
+import CategoriesPage from "./pages/CategoriesPage";
 
 const Layout = () => {
 	return (
-		<main className="max-w-7xl mx-auto px-6">
+		<div className="font-poppins">
 			<Header />
-			<Outlet />
+			<main className="max-w-7xl mx-auto px-6">
+				<ScrollToTop />
+				<Outlet />
+			</main>
 			<Footer />
-		</main>
+		</div>
 	);
+};
+
+const ScrollToTop = () => {
+	const { pathname } = useLocation();
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [pathname]);
+	// Automatically scrolls to top whenever pathname changes
 };
 
 const router = createBrowserRouter([
@@ -31,11 +40,19 @@ const router = createBrowserRouter([
 				element: <Home />,
 			},
 			{
-				path: "/products/:id",
-				element: <ProductsList />,
+				path: "/account",
+				element: <Account />,
 			},
 			{
-				path: "/product/:id",
+				path: "/categories/:id",
+				element: <CategoriesPage />,
+			},
+			{
+				path: "/categories/:id/products/:id",
+				element: <ProductView />,
+			},
+			{
+				path: "/products/:id",
 				element: <ProductView />,
 			},
 		],
