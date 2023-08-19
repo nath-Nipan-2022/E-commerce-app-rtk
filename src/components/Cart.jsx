@@ -6,9 +6,10 @@ import {
 	removeCart,
 } from "../store/slices/cartsSlice";
 import Counter from "./Counter";
+import ProductImage from "./ProductImage";
 
 function Cart({ className, cartItem }) {
-	const { name, price, quantity, images, altText } = cartItem;
+	const { name, price, images, desc } = cartItem.attributes;
 
 	const dispatch = useDispatch();
 
@@ -26,13 +27,7 @@ function Cart({ className, cartItem }) {
 
 	return (
 		<div className={`flex items-center gap-4 ${className}`}>
-			<figure className="w-14 h-16 rounded overflow-hidden">
-				<img
-					src={images[0]}
-					alt={altText}
-					className="w-full h-full object-cover"
-				/>
-			</figure>
+			<ProductImage className="w-14 h-14 rounded" url={images.data[0].attributes.url} alt={desc} />
 			<article className="flex-1">
 				<h3 className="mb-2 text-gray-700 flex gap-1 justify-between">
 					{name}
@@ -47,7 +42,7 @@ function Cart({ className, cartItem }) {
 					{/* counter*/}
 					<Counter
 						className={"border rounded-md"}
-						count={quantity}
+						count={cartItem.quantity}
 						onIncrement={increment}
 						onDecrement={decrement}
 					/>
