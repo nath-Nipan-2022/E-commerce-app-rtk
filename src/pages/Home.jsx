@@ -1,26 +1,37 @@
 import Category from "../components/Category";
 import ProductsList from "../components/ProductsList";
+import Skeleton from "../components/Skeleton";
 import Slider from "../components/Slider";
-// import { useState } from "react";
+import { useGetProductsQuery } from "../store/apis/productsApi";
 
-function Home() {
+function Home () {
+	const { data, isLoading, error } = useGetProductsQuery(
+		`?populate=*&filters[type][$eq]=trending`
+	);
+
+	const randomIndex = data?.data.length >= 2 ?
+		Math.floor(Math.random() * (data?.data.length - 1)) : 0;
+
 	return (
 		<div className="mt-4">
-			<section className=" bg-rose-100 mx-auto rounded-lg max-w-2xl lg:max-w-7xl overflow-hidden">
-				<Slider />
+			<section className="max-container bg-rose-300 rounded-lg overflow-hidden">
+				{isLoading ? <Skeleton className={'w-full h-72 border'}/>
+					: <Slider images={data.data[randomIndex].attributes.images.data} />
+				}
 			</section>
 
-			<section className="mx-auto max-w-2xl py-16 lg:max-w-7xl">
-				<h2 className="text-2xl font-medium mb-8">Trending Products For You</h2>
+			<section className="max-container py-4 lg:py-10">
+				<h2 className="text-h2">Trending Products For You</h2>
 				<ProductsList type="trending" />
 			</section>
 
-			<section>
-				<Category className="mx-auto rounded max-w-2xl lg:max-w-7xl" />
+			<section className="max-container rounded mt-4">
+				<h2 className="text-h2">Shop Our Top Categories </h2>
+				<Category />
 			</section>
 
-			<section className="mx-auto max-w-2xl py-16 lg:max-w-7xl">
-				<h2 className="text-2xl font-medium mb-8">Most Bought Products</h2>
+			<section className="max-container py-16">
+				<h2 className="text-h2">Most Bought Products</h2>
 				<ProductsList type="featured" />
 			</section>
 		</div>
