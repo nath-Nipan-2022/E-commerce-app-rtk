@@ -5,21 +5,21 @@ function Submenus({ menu, className, childrenClassName }) {
 		<ul className={className}>
 			{menu.children?.map((item, i) => {
 				return (
-					<li key={i} className="mb-2">
+					<li key={i}>
 						<Link
-							to={menu.label.toLowerCase() + "/" + item.label.toLowerCase()}
+							to={menu.label.toLowerCase() + "/" + item.label}
 							className={`block p-2 ${childrenClassName}`}
 						>
-							<figure className="p-2 w-2/6 aspect-square hidden lg:block">
+							<figure className="p-2 w-20 aspect-square hidden lg:block"> 
 								<img
 									src={item.imageSrc}
 									alt={item.altText}
-									className="scale-150 h-full object-cover"
+									className="h-full w-full object-cover"
 								/>
 							</figure>
-							<div className="lg:p-2 lg:w-44">
-								<h3 className="text-sm lg:text-base">{item.label}</h3>
-								<p className="text-xs lg:text-sm text-gray-700">
+							<div className="flex flex-col justify-between sm:flex-row sm:pr-8 lg:flex-col lg:p-2 lg:w-44">
+								<h6 className="text-sm lg:text-base">{item.label}</h6>
+								<p className="text-xs lg:text-sm text-slate-500">
 									{item.itemsAvailable} Items Available
 								</p>
 							</div>
