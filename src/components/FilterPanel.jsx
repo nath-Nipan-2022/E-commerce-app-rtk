@@ -1,21 +1,22 @@
 import { useState } from "react";
 import CategoriesInputs from "./CategoriesInputs";
 import Skeleton from "./Skeleton";
-import { GoStarFill } from "react-icons/go";
+import RatingStarsInputs from "./RatingStarsInputs";
 
-function FilterPanel({
+function FilterPanel ({
+	products,
 	subCats,
 	onSubCatsChange,
-	maximumPrice,
 	setPriceRange,
 	setPriceOrder,
 	setRatings,
-	showPanel,
-	setShowFilterPanel,
+	className,
 }) {
-	const [maxPrice, setMaxPrice] = useState(maximumPrice);
-
-	const [review, setReview] = useState(4);
+	// get maxPriceAmount 
+	const maxAmount = products?.data.reduce((acc, curr) => {
+		return Math.max(acc, Math.round(curr.attributes.price));
+	}, 0);
+	const [maxPrice, setMaxPrice] = useState(maxAmount);
 
 	const handlePriceChange = (e) => {
 		setMaxPrice(e.target.value);
@@ -26,34 +27,9 @@ function FilterPanel({
 		setPriceOrder(order);
 	};
 
-	const handleChange = (i) => {
-		setReview(i);
-	};
-
-	const renderReviews = Array(5)
-		.fill(0)
-		.map((_, i) => (
-			<GoStarFill
-				key={i}
-				onClick={() => handleChange(i)}
-				className={`transition-colors text-${
-					i <= review ? "yellow-500" : "gray-300"
-				}`}
-			/>
-		));
-
 	return (
-		<div>
-			{showPanel && (
-				<div
-					className="fixed inset-0 z-20 bg-black/50"
-					onClick={() => setShowFilterPanel(false)}
-				></div>
-			)}
 			<section
-				className={`w-52 fixed z-20 left-0 top-0 h-screen bg-white shadow-xl lg:shadow-sm lg:static lg:left-auto lg:top-auto lg:h-auto lg:translate-x-0 transition duration-300 ${
-					showPanel ? "translate-x-0" : "-translate-x-full duration-200"
-				}`}
+				className={className}
 			>
 				<h3 className="p-4 border border-b-0 font-medium rounded-t-lg">
 					Filter
@@ -87,38 +63,22 @@ function FilterPanel({
 							<span className="mr-0.5">$</span>
 							{0}
 						</output>
-						<output className="rounded-lg border py-1 px-3 w-16">
+						<output className="rounded-lg border py-1 px-3">
 							<span className="mr-0.5">$</span>
-							{maxPrice}
+							{maxPrice || maxAmount}
 						</output>
 					</div>
 					<input
 						type="range"
 						min={0}
-						max={maximumPrice}
+						max={maxAmount}
 						onChange={handlePriceChange}
 						className="w-full h-2.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-slate-700"
 					/>
 				</article>
 
-				<article className="p-4 border border-b-0">
-					<h3 className="font-medium">Rating</h3>
-					<div className="flex gap-2 items-center my-2 group cursor-pointer">
-						<input
-							type="checkbox"
-							id="checkbox-rating"
-							name="checkbox-rating"
-							onChange={() => setIsCheckedRatings((prev) => !prev)}
-						/>
-						{renderReviews}
-						<label
-							className="text-gray-600 group-hover:text-gray-800 flex-1 cursor-pointer"
-							htmlFor="checkbox-rating"
-						>
-							above
-						</label>
-					</div>
-				</article>
+				<RatingStarsInputs onChange={setRatings} />
+				
 
 				<article className="p-4 border rounded-b-lg">
 					<h3 className="font-medium">Sort by</h3>
@@ -152,7 +112,6 @@ function FilterPanel({
 					</div>
 				</article>
 			</section>
-		</div>
 	);
 }
 
