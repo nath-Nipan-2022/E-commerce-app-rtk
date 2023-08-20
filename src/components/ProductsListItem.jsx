@@ -6,22 +6,27 @@ import { useDispatch } from "react-redux";
 import { addCart } from "../store";
 import ProductImage from "./ProductImage";
 import ReviewsStars from "./ReviewsStars";
+import { toast } from "react-hot-toast";
 
 function ProductsListItem({ product }) {
 	const { name, price, reviews, ratings, images } = product.attributes;
 
-	const [quantity, setQuantity] = useState(1);
 	const dispatch = useDispatch();
 
 	const addToCart = () => {
-		setQuantity((prev) => prev + 1);
-
 		dispatch(
 			addCart({
 				...product,
-				quantity: quantity,
 			})
 		);
+		toast(`Item Added To Your Cart!`, {
+			icon: "🔥",
+			style: {
+				border: "1px solid #9a9aaa",
+				background: "#1b1b1b",
+				color: "#f5f5f5",
+			},
+		});
 	};
 
 	return (
