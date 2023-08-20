@@ -7,6 +7,7 @@ import {
 } from "../store/slices/cartsSlice";
 import Counter from "./Counter";
 import ProductImage from "./ProductImage";
+import { toast } from "react-hot-toast";
 
 function Cart({ className, cartItem }) {
 	const { name, price, images, desc } = cartItem.attributes;
@@ -23,6 +24,14 @@ function Cart({ className, cartItem }) {
 
 	const handleRemove = () => {
 		dispatch(removeCart(cartItem));
+		toast(`Item removed from Cart!`, {
+			icon:'❗',
+			style: {
+				border: "1px solid #9a9aaa",
+				background: '#1b1b1b',
+				color: '#f5f5f5',
+			},
+		});
 	};
 
 	return (
