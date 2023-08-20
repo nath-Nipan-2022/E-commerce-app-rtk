@@ -100,7 +100,7 @@ function CategoriesPage() {
 			<div>
 				{showPanel && (
 					<div
-						className="fixed inset-0 z-20 bg-black/50"
+						className="fixed inset-0 z-20 bg-black/50 opacity-0 animate-fadeIn"
 						onClick={() => setShowFilterPanel(false)}
 					></div>
 				)}
