@@ -3,6 +3,7 @@ import { resetCart } from "../store/slices/cartsSlice";
 import { GoX } from "react-icons/go";
 
 import Cart from "./Cart";
+import { toast } from "react-hot-toast";
 function CartList({ className, onClose }) {
 	const carts = useSelector((state) => state.carts.list);
 	const dispatch = useDispatch();
@@ -17,6 +18,14 @@ function CartList({ className, onClose }) {
 
 	const removeAllCarts = () => {
 		dispatch(resetCart());
+		toast(`Your Cart Is Empty Now!`, {
+			icon: "😪",
+			style: {
+				border: "1px solid #9a9aaa",
+				background: "#1b1b1b",
+				color: "#f5f5f5",
+			},
+		});
 	};
 
 	return (
