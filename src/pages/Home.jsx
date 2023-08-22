@@ -13,9 +13,9 @@ function Home () {
 		Math.floor(Math.random() * (data?.data.length - 1)) : 0;
 
 	return (
-		<div className="mt-4">
+		<div className="mt-2">
 			<section className="max-container bg-rose-300 rounded-lg overflow-hidden">
-				{isLoading ? <Skeleton className={'w-full h-72 border'}/>
+				{isLoading ? <Skeleton className={'w-full h-36 sm:h-44 lg:h-72 border'}/>
 					: <Slider images={data.data[randomIndex].attributes.images.data} />
 				}
 			</section>
