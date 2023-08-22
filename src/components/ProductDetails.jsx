@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import Button from "./Button";
 import Panel from "./Panel";
-import { GoStar, GoStarFill } from "react-icons/go";
 import { useState } from "react";
 import Wishlist from "./Wishlist";
 import { useDispatch } from "react-redux";
@@ -9,10 +8,12 @@ import { addCart } from "../store/slices/cartsSlice";
 import Counter from "./Counter";
 import ProductImage from "./ProductImage";
 import ReviewsStars from "./ReviewsStars";
+import { toast } from "react-hot-toast";
 
 function ProductDetails({ product }) {
 	const [imageIndex, setImageIndex] = useState(0);
 	const [quantity, setQuantity] = useState(1);
+	const [tempQty, setTempQty] = useState(0);
 	const { name, desc, price, reviews, ratings, images } = product.attributes;
 
 	const dispatch = useDispatch();
@@ -23,13 +24,25 @@ function ProductDetails({ product }) {
 				quantity: quantity,
 			})
 		);
+		// for toasting
+		if (quantity && (quantity !== tempQty) ) {
+			toast(`Item Added To Your Carts!`, {
+				icon: "🔥",
+				style: {
+					border: "1px solid #9a9aaa",
+					background: "#1b1b1b",
+					color: "#f5f5f5",
+				},
+			});
+			setTempQty(quantity);
+		}
 	};
 
 	const increment = () => {
 		setQuantity((prev) => prev + 1);
 	};
 	const decrement = () => {
-		setQuantity((prev) => prev - 1);
+		quantity > 1 && setQuantity((prev) => prev - 1);
 	};
 	const renderImgBoxes = images.data.map((image, i) => (
 		<ProductImage
@@ -110,12 +123,12 @@ function ProductDetails({ product }) {
 					<Panel className="mt-6 flex items-center gap-6">
 						<Link
 							to={"/"}
-							className="py-2 px-4 lg:px-6 text-xs lg:text-base rounded-lg border bg-slate-900 text-white border-slate-900 transition hover:bg-slate-700 hover:border-slate-700"
+							className="py-1.5 md:py-2 px-4 lg:px-6 text-xs lg:text-base rounded-lg border bg-slate-900 text-white border-slate-900 transition hover:bg-slate-700 hover:border-slate-700"
 						>
 							Buy Now
 						</Link>
 						<Button
-							className="hover:bg-slate-900 hover:border-slate-900 hover:text-white py-1.5 px-3 md:px-4 text-xs lg:text-base rounded-lg transition border border-gray-300"
+							className="hover:bg-slate-900 hover:border-slate-900 hover:text-white py-1.5 px-2 md:px-4 md:py-2 text-xs lg:text-base rounded-lg transition border border-gray-300 active:scale-95"
 							onClick={addToCart}
 						>
 							Add to Cart
