@@ -6,7 +6,6 @@ import SearchForm from "./SearchForm";
 import logo from "../assets/shopping logo.png";
 import { useState } from "react";
 import Navbar from "./Navbar";
-import Modal from "./Modal";
 import CartList from "./CartList";
 import { useSelector } from "react-redux";
 
@@ -21,39 +20,40 @@ function Header() {
 
 	return (
 		<header className="sticky top-0 z-10 bg-white">
-			<div className="max-w-7xl mx-auto px-6 flex justify-between md:justify-evenly lg:justify-between items-center p-2">
-				<div>
-					<Link to={"/"} className="flex items-center font-medium">
-						<img src={logo} alt="company logo" width={56} />
-						<span className="text-xl font-medium">ShopCart</span>
-					</Link>
-				</div>
+			<div className="max-w-7xl mx-auto px-6 flex justify-between items-center p-2">
+				<Link to={"/"} className="flex items-center ">
+					<img src={logo} alt="company logo" width={44} title="Company logo" />
+					<span className="text-xl ">ShopCart</span>
+				</Link>
+
 				<Navbar openMenu={openMenu} onClose={onMenuClose} />
+
 				<SearchForm className={"sm:w-60 ml-auto sm:ml-0 lg:w-auto"} />
-				<div className="flex items-center gap-4 font-medium">
+
+				<div className="flex items-center gap-1 md:gap-4 ">
 					<Link
 						to={"/account"}
-						className="flex items-center gap-2 p-1 px-1.5 rounded"
+						className="flex items-center gap-2 p-1 px-1.5 rounded text-gray-600 hover:text-slate-900"
 					>
 						<GoPerson />
-						<span className="hidden lg:inline-block">Account</span>
+						<span className="hidden lg:inline-block leading-8">Account</span>
 					</Link>
-					<FiMenu
-						className="block cursor-pointer lg:hidden ml-1"
-						onClick={onMenuClose}
-					/>
 					<div
-						className="flex items-center gap-2 p-1 px-1.5 rounded  cursor-pointer"
+						className="flex items-center gap-2 p-1 px-1.5 rounded  cursor-pointer text-gray-600 hover:text-slate-900"
 						onClick={() => setOpenCartList(true)}
 					>
 						<div className="relative">
 							<BsCart2 />
-							<span className="absolute -top-1/2 -right-1/2 w-4 h-4 font-bold text-[10px] grid place-items-center rounded-full bg-blue-600 text-white">
+							<span className="absolute -top-1/2 -right-1/2 w-4 h-4 text-[10px] grid place-items-center rounded-full bg-blue-600 text-white font-medium">
 								{cartQuantity}
 							</span>
 						</div>
-						<span>Cart</span>
+						<span className="hidden lg:inline-block leading-8">Cart</span>
 					</div>
+					<FiMenu
+						className="block cursor-pointer lg:hidden ml-1 text-gray-600 hover:text-slate-900"
+						onClick={onMenuClose}
+					/>
 				</div>
 				{openCartList && <CartList onClose={() => setOpenCartList(false)} />}
 			</div>
