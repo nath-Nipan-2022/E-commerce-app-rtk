@@ -1,33 +1,35 @@
 import { useEffect, useState } from "react";
-import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md'
+import { BsHeartFill } from "react-icons/bs";
 
-function Wishlist ({ productCard}) {
+function Wishlist({ productCard }) {
 	const [isWishlist, setIsWishlist] = useState(null);
 
 	useEffect(() => {
 		if (isWishlist) {
-			console.log('Adding Wishlist');
-		} else if(isWishlist === false) {
-			console.log('Removing Wishlist');
+			console.log("Adding Wishlist");
+		} else if (isWishlist === false) {
+			console.log("Removing Wishlist");
 		}
-	},[isWishlist])
+	}, [isWishlist]);
 
-  return (
+	return (
 		<div
-			className="p-1.5 absolute right-2 top-2 bg-white w-9 h-9 rounded shadow hover:bg-gray-100 cursor-pointer"
+			className="p-1.5 absolute right-2 top-1.5 w-8 h-8 cursor-pointer drop-shadow"
 			onClick={() => setIsWishlist((prev) => !prev)}
 		>
-			<MdOutlineFavorite
+			<BsHeartFill
 				className={`absolute w-6 h-6 left-1/2 -translate-x-1/2 transition ${
-					isWishlist ? "opacity-100 scale-100" : "opacity-0 scale-125"
+					isWishlist ? "opacity-100 scale-100" : "opacity-0 scale-150"
 				}`}
+				style={{ color: "#db505b" }}
 			/>
-			<MdOutlineFavoriteBorder
-				className={` absolute w-6 h-6 left-1/2 -translate-x-1/2 transition ${
-					isWishlist ? "scale-150 opacity-0" : "scale-100 opacity-100 "
+			<BsHeartFill
+				className={`absolute w-6 h-6 left-1/2 -translate-x-1/2 transition ${
+					!isWishlist ? "opacity-100 scale-100" : "opacity-0 scale-150"
 				}`}
+				style={{ color: "#fff" }}
 			/>
 		</div>
 	);
 }
-export default Wishlist
+export default Wishlist;
