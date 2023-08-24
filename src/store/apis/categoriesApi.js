@@ -11,7 +11,11 @@ const categoriesApi = createApi({
 	tagTypes: ["Category"],
 
 	baseQuery: fetchBaseQuery({
-		baseUrl: "https://dummyjson.com/products",
+		baseUrl: import.meta.env.VITE_REACT_APP_API_URL,
+		prepareHeaders: (headers) => {
+			headers.set('authorization', 'Bearer ' + import.meta.env.VITE_REACT_APP_API_TOKEN);
+			return headers;
+		},
 		fetchFn: async (...args) => {
 			await pause(500);
 			return fetch(...args);
@@ -19,17 +23,23 @@ const categoriesApi = createApi({
 	}),
 	endpoints: (builder) => ({
 		getCategories: builder.query({
-			query: (query) => `/category/${query}`,
+			query: (query) => `/categories/${query}`,
 			providesTags: (results, error, category) => {
-				const tags = results.map((category) => ({
-					type: "category",
+				const tags = results.data.map((category) => ({
+					type: "categories",
 					id: category.id,
 				}));
 				return tags;
 			},
 		}),
+		getACategory: builder.query({
+			query: (category) => `/products/${category}`
+		}),
+		getSubcategories: builder.query({
+			query: (category) => `/sub-categories/${category}`
+		})
 	}),
 });
 
 export { categoriesApi };
-export const { useGetCategoriesQuery } = categoriesApi;
+export const { useGetCategoriesQuery,useGetACategoryQuery, useGetSubcategoriesQuery } = categoriesApi;

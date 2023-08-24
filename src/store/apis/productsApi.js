@@ -12,13 +12,16 @@ const productsApi = createApi({
 
 	baseQuery: fetchBaseQuery({
 		baseUrl: import.meta.env.VITE_REACT_APP_API_URL,
-		prepareHeaders: (headers, { getState }) => {
-			const token = getState().auth.token;
+		prepareHeaders: (headers) => {
+			// const token = getState().auth.token;
 			// console.log(token);
 			// If we have a token set in state, let's assume that we should be passing it.
-			if (token) {
-				headers.set("authorization", `Bearer ${token}`);
-			}
+			headers.set(
+				"authorization",
+				`Bearer ${import.meta.env.VITE_REACT_APP_API_TOKEN}`
+			);
+			// if (!token) {
+			// }
 			return headers;
 		},
 		fetchFn: async (...args) => {
@@ -28,22 +31,17 @@ const productsApi = createApi({
 	}),
 	endpoints: (builder) => ({
 		getProducts: builder.query({
-			query: (query = "") => {
-				return {
-					url: `/products${query}`,
-					method: "GET",
-				};
+			query: (type) => {
+				return `/products${type}`;
 			},
-			// providesTags: (results, error, products) => {
-			// 	const tags = results.map((product) => ({
-			// 		type: "product",
-			// 		id: product.id,
-			// 	}));
-			// 	return tags;
-			// },
+			providesTags: () => [{ type: "Products", id: "LIST" }],
+		}),
+
+		getProductById: builder.query({
+			query: (productId) => `/products${productId}`,
 		}),
 	}),
 });
 
 export { productsApi };
-export const { useGetProductsQuery } = productsApi;
+export const { useGetProductsQuery, useGetProductByIdQuery } = productsApi;
