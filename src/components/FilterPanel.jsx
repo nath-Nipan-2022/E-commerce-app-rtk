@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Skeleton from "./Skeleton";
 import RatingStarsInputs from "./Rating/RatingStarsInputs";
 
@@ -11,11 +11,12 @@ function FilterPanel({
   setRatings,
   className,
 }) {
-  // get maxPriceAmount
-  const maxAmount = products?.data.reduce((acc, curr) => {
-    return Math.max(acc, Math.round(curr.attributes.price));
-  }, 0);
+  let maxAmount = getMaxPrice(products);
   const [maxPrice, setMaxPrice] = useState(maxAmount);
+
+  useEffect(() => {
+    setMaxPrice(getMaxPrice(products));
+  }, [products]);
 
   const handlePriceChange = (e) => {
     setMaxPrice(e.target.value);
@@ -48,9 +49,9 @@ function FilterPanel({
 
   return (
     <section className={className}>
-      <h3 className="p-4 border border-b-0 font-medium rounded-t-lg">Filter</h3>
+      {/* <h3 className="p-4 border border-b-0 font-medium rounded-t-lg">Filter</h3> */}
 
-      <article className="p-4 border border-b-0">
+      <article className="p-4 border border-b-0 rounded-t-lg">
         <h3 className="font-medium">Categories</h3>
         {subCats?.data ? (
           <div>{renderSubCatsInputs}</div>
@@ -124,6 +125,13 @@ function FilterPanel({
       </article>
     </section>
   );
+}
+
+function getMaxPrice(products) {
+  const max = products?.data.reduce((acc, curr) => {
+    return Math.max(acc, Math.round(curr.attributes.price));
+  }, 0);
+  return max || 0;
 }
 
 export default FilterPanel;
