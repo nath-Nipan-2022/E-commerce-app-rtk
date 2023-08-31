@@ -54,13 +54,17 @@ function ProductDetails({ product }) {
   const renderColorBoxes = Array(4)
     .fill(0)
     .map((_, i) => {
+      let isActive = imageIndex === i;
+
       return (
-        // These are like Accordions,
         <Button
           key={i}
-          className={
-            "w-8 h-8 rounded-full outline outline-gray-300 outline-offset-2 bg-gray-300 hover:outline-rose-400 hover:bg-rose-300 border-0"
-          }
+          onClick={() => setImageIndex(i)}
+          className={`w-8 h-8 rounded-full outline-offset-2 hover:outline-rose-400 hover:bg-rose-300 border-0 ${
+            isActive
+              ? " outline outline-rose-400 bg-rose-300"
+              : " outline bg-gray-300 outline-gray-300"
+          }`}
         />
       );
     });
