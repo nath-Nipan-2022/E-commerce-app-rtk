@@ -1,20 +1,24 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
+
+// components
+import Button from "../components/Button";
+import FilterPanel from "../components/FilterPanel";
+import { ProductsListItem } from "../components/Product";
+import Skeleton from "../components/Skeleton";
+import Slider from "../components/Slider";
+import { GoFilter } from "react-icons/go";
+
+// hooks
+import useFilter from "../hooks/useFilter";
 import {
   useGetACategoryQuery,
   useGetSubcategoriesQuery,
 } from "../store/apis/categoriesApi";
-import { useState } from "react";
-import Slider from "../components/Slider";
-import { ProductsListItem } from "../components/Product";
-import Skeleton from "../components/Skeleton";
-import FilterPanel from "../components/FilterPanel";
-import { GoFilter } from "react-icons/go";
-import Button from "../components/Button";
-import useFilter from "../hooks/useFilter";
 
 function CategoriesPage() {
-  const { id: name } = useParams();
-  const category = `filters[categories]?filters[name][$eq]=${name}`;
+  const { type } = useParams();
+  const category = `filters[categories]?filters[name][$eq]=${type}`;
 
   // get the products matching the category
   const {
@@ -43,14 +47,12 @@ function CategoriesPage() {
   const [showPanel, setShowFilterPanel] = useState(false);
 
   return (
-    <div>
-      <div className="sticky top-[72px]">
-        {showPanel && (
-          <div
-            className="fixed inset-0 z-20 bg-black/50 opacity-0 animate-fadeIn"
-            onClick={() => setShowFilterPanel(false)}
-          ></div>
-        )}
+    <div className="flex flex-col gap-6 lg:flex-row">
+      <aside
+        className={`flex-shrink-0 filter-panel-wrapper ${
+          showPanel ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        }`}
+      >
         <FilterPanel
           products={products}
           subCats={subCats}
@@ -58,27 +60,25 @@ function CategoriesPage() {
           setPriceRange={setPriceRange}
           setPriceOrder={setPriceOrder}
           setRatings={setRatings}
-          className={`w-52 fixed z-20 left-0 top-0 h-screen bg-white shadow-xl lg:shadow-sm lg:absolute lg:z-0 lg:left-auto lg:top-auto lg:h-auto lg:translate-x-0 transition duration-300 ${
-            showPanel ? "translate-x-0" : "-translate-x-full duration-200"
-          }`}
+          className={`lg:sticky lg:top-[72px] w-52`}
         />
-      </div>
+      </aside>
       {/* Crucial styles ⭐⭐ */}
-      <div className="lg:ml-52 lg:pl-4">
-        <section className="w-full bg-fuchsia-300 rounded-lg overflow-hidden">
+      <section className="w-[calc(100%-208px-24px)]">
+        <div className="w-full overflow-hidden rounded-lg bg-fuchsia-300">
           {isLoading ? (
             <Skeleton className={"w-full h-52 border"} />
           ) : (
             <Slider
               images={products.data[0].attributes.images.data}
-              className={"lg:max-h-52"}
+              className={"lg:max-h-72"}
             />
           )}
-        </section>
-        <section className="mx-auto">
-          <h2 className="my-6 flex justify-between items-center">
+        </div>
+        <article className="w-full mx-auto">
+          <h2 className="flex items-center justify-between my-6">
             <span className="text-2xl font-medium">
-              Trending {name} For You
+              Trending {type} For You
             </span>
             {/* FilterPanel Toggler */}
             <Button
@@ -98,8 +98,16 @@ function CategoriesPage() {
             )}
             {error && "Error loading category products"}
           </div>
-        </section>
-      </div>
+        </article>
+
+        {/* modal background */}
+        {showPanel && (
+          <div
+            className="fixed inset-0 z-10 opacity-0 bg-black/70 animate-fadeIn"
+            onClick={() => setShowFilterPanel(false)}
+          ></div>
+        )}
+      </section>
     </div>
   );
 }
