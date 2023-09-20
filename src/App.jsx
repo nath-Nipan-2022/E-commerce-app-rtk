@@ -9,7 +9,7 @@ const Layout = () => {
   return (
     <div className="font-poppins">
       <Header />
-      <main className="max-w-7xl mx-auto px-6">
+      <main className="px-6 mx-auto max-w-7xl">
         <ScrollToTop />
         <Outlet />
         <Toaster position="bottom-center" />
@@ -30,19 +30,15 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/account",
+        path: "account",
         element: <Account />,
       },
       {
-        path: "/categories/:id",
+        path: "categories/:type",
         element: <CategoriesPage />,
       },
       {
-        path: "/categories/:id/products/:id",
-        element: <ProductView />,
-      },
-      {
-        path: "/products/:id",
+        path: "products/:id",
         element: <ProductView />,
       },
     ],
