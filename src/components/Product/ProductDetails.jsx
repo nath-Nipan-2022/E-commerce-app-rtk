@@ -41,15 +41,18 @@ function ProductDetails({ product }) {
   const decrement = () => {
     quantity > 1 && setQuantity((prev) => prev - 1);
   };
-  const renderImgBoxes = images.data.map((image, i) => (
-    <ProductImage
-      key={i}
-      url={image.attributes.url}
-      alt={desc}
-      className="cursor-pointer group w-1/4 lg:w-full lg:h-1/4"
-      onMouseEnter={() => setImageIndex(i)}
-    />
-  ));
+  const renderImgBoxes = images.data.map((image, i) => {
+    let activeClass = i === imageIndex ? "shadow-xl p-1" : "";
+    return (
+      <div
+        key={i}
+        onMouseEnter={() => setImageIndex(i)}
+        className={`w-1/4 rounded-xl cursor-pointer group lg:w-full lg:h-1/4 ${activeClass}`}
+      >
+        <ProductImage url={image.attributes.url} alt={desc} />
+      </div>
+    );
+  });
 
   const renderColorBoxes = Array(4)
     .fill(0)
@@ -84,7 +87,7 @@ function ProductDetails({ product }) {
           <Wishlist productCard={product} />
         </div>
         {/* Images column special classNames*/}
-        <div className="flex gap-2 justify-between lg:flex-col lg:w-20">
+        <div className="flex justify-between gap-2 lg:flex-col lg:w-20">
           {renderImgBoxes}
         </div>
       </section>
@@ -92,23 +95,23 @@ function ProductDetails({ product }) {
       <section>
         <Panel className={"pb-4"}>
           <h2 className="text-2xl font-medium">{name}</h2>
-          <p className="text-gray-600 py-2">{desc}</p>
+          <p className="py-2 text-gray-600">{desc}</p>
           <ReviewsStars ratings={ratings} reviews={reviews} />
         </Panel>
 
         <Panel className={"border-t py-2"}>
           <h3 className="text-lg">${price}</h3>
-          <p className="text-gray-600 py-1">
+          <p className="py-1 text-gray-600">
             Suggested payments with 6 months special financing.
           </p>
         </Panel>
 
-        <Panel className="border-t py-2">
+        <Panel className="py-2 border-t">
           <h3 className="font-medium">Choose a color</h3>
-          <div className="py-4 flex gap-3">{renderColorBoxes}</div>
+          <div className="flex gap-3 py-4">{renderColorBoxes}</div>
         </Panel>
 
-        <Panel className="border-t py-4">
+        <Panel className="py-4 border-t">
           <Panel className="flex items-center gap-6">
             <Counter
               count={quantity}
@@ -116,12 +119,12 @@ function ProductDetails({ product }) {
               onDecrement={decrement}
               className={"rounded-md bg-rose-100"}
             />
-            <div className="text-gray-600 text-sm">
-              Only <span className="text-orange-600 font-medium">{212}</span>{" "}
+            <div className="text-sm text-gray-600">
+              Only <span className="font-medium text-orange-600">{212}</span>{" "}
               items left.
             </div>
           </Panel>
-          <Panel className="mt-6 flex items-center gap-6">
+          <Panel className="flex items-center gap-6 mt-6">
             <Link
               to={"/"}
               className="py-1.5 md:py-2 px-4 lg:px-6 text-xs lg:text-base rounded-lg border bg-slate-900 text-white border-slate-900 transition hover:bg-slate-700 hover:border-slate-700"

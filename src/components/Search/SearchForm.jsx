@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useGetProductsQuery } from "../../store/apis/productsApi";
 import { GoSearch } from "react-icons/go";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function SearchForm() {
   const [searchValue, setSearchValue] = useState("");
@@ -48,10 +48,11 @@ function SearchForm() {
     }
   };
 
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     setSearchValue("");
-    location.href = `/products/${filteredProducts[selectedIndex].id}`; // but refreshes the page
+    navigate(`/products/${filteredProducts[selectedIndex].id}`);
     setSelectedIndex(0);
   };
 
@@ -94,7 +95,7 @@ function SearchForm() {
             onChange={(e) => setSearchValue(e.target.value)}
             onKeyDown={handleKeyBoardNavigation}
           />
-          <span className="absolute top-0 right-0 h-full w-10 grid place-items-center rounded-r-3xl">
+          <span className="absolute top-0 right-0 grid w-10 h-full place-items-center rounded-r-3xl">
             <GoSearch className="text-gray-600 hover:text-gray-800" />
           </span>
         </form>
@@ -106,17 +107,17 @@ function SearchForm() {
               : "opacity-0 invisible"
           }`}
         >
-          <ul className="py-2 bg-white rounded-md shadow-xl border">
+          <ul className="py-2 bg-white border rounded-md shadow-xl">
             {renderSearchResults}
           </ul>
         </div>
       </div>
 
       <span
-        className="p-2 flex place-items-center md:hidden"
+        className="flex p-2 cursor-pointer place-items-center md:hidden"
         onClick={() => setOpenSearch(true)}
       >
-        <GoSearch className=" text-gray-700 hover:text-gray-800" />
+        <GoSearch className="text-gray-700 hover:text-gray-800" />
       </span>
     </div>
   );

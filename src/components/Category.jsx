@@ -18,14 +18,16 @@ function CategorySection({ className }) {
       <Link
         to={`/categories/${item.attributes.name}`}
         key={item.id}
-        className=" relative group h-56 rounded-xl overflow-hidden"
+        className="relative h-56 overflow-hidden group rounded-xl"
       >
         <ProductImage
           url={images[randomImgIndex].attributes.url}
           alt={item.desc}
-          className={"aspect-auto h-full w-full"}
+          className={
+            "aspect-auto h-full w-full group-hover:scale-105 transition-transform duration-200"
+          }
         />
-        <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/40 to-black/5 lg:text-lg text-white text-center p-4 pb-6">
+        <div className="absolute inset-0 flex items-end justify-center p-4 pb-6 text-center text-white bg-gradient-to-t from-black/40 to-[#00000020] font-semibold lg:text-lg">
           {item.attributes.name.toUpperCase()}
         </div>
       </Link>

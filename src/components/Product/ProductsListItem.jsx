@@ -26,13 +26,17 @@ function ProductsListItem({ product }) {
   };
 
   return (
-    <div className="relative group cursor-pointer lg:hover:ring lg:hover:ring-slate-100 lg:p-2 lg:pb-3 rounded-md">
-      <Link to={`products/${product.id}`}>
-        <ProductImage product={product} url={images.data[0].attributes.url} />
-        <article className="font-medium lg:px-2 text-gray-800">
-          <h3 className="leading-snug lg:text-lg mt-2">{name}</h3>
+    <div className="relative rounded-md cursor-pointer group lg:hover:ring lg:hover:ring-slate-100 lg:p-2 lg:pb-3">
+      <Link to={`/products/${product.id}`}>
+        <ProductImage
+          product={product}
+          url={images.data[0].attributes.url}
+          className="transition-transform duration-300 rounded-md group-hover:scale-105"
+        />
+        <article className="mt-2 font-medium text-gray-800 lg:px-2">
+          <h3 className="leading-snug lg:text-lg">{name}</h3>
           <ReviewsStars reviews={reviews} ratings={ratings} />
-          <p className="text-lg mb-2 text-slate-700">${price}</p>
+          <p className="mt-1 mb-2 text-lg text-slate-700">${price}</p>
         </article>
       </Link>
       <Button

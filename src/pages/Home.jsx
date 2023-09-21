@@ -14,7 +14,7 @@ function Home() {
 
   return (
     <div>
-      <section className="max-container bg-rose-300 rounded-lg overflow-hidden">
+      <section className="overflow-hidden rounded-lg max-container bg-rose-300">
         {isLoading ? (
           <Skeleton className={"w-full h-36 sm:h-44 lg:h-72 border"} />
         ) : (
@@ -23,17 +23,17 @@ function Home() {
         {error && "Error Loading Slider"}
       </section>
 
-      <section className="max-container py-4 lg:py-10">
+      <section className="py-4 max-container lg:py-10">
         <h2 className="text-h2">Trending Products For You</h2>
         <ProductsList type="trending" />
       </section>
 
-      <section className="max-container rounded mt-4">
+      <section className="mt-4 rounded max-container">
         <h2 className="text-h2">Shop Our Top Categories </h2>
         <CategorySection />
       </section>
 
-      <section className="max-container py-16">
+      <section className="py-16 max-container">
         <h2 className="text-h2">Most Bought Products</h2>
         <ProductsList type="featured" />
       </section>

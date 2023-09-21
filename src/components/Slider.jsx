@@ -26,22 +26,22 @@ function Slider({ images, className }) {
       <div>
         <h3 className="font-bold text-[4vw] md:text-3xl lg:text-4xl text-slate-700 mb-3 md:mb-6">
           Grab Upto
-          <span className="text-white drop-shadow-xl rounded mx-1 px-1">
+          <span className="px-1 mx-1 text-white rounded drop-shadow-xl">
             50%
           </span>
           Off <span className="block">On Selected Products</span>
         </h3>
         <Link
           to={"/"}
-          className="inline-block rounded-full py-2 px-4 bg-slate-800 text-white text-xs sm:text-base sm:px-6 font-medium hover:bg-slate-700 transition"
+          className="inline-block px-4 py-2 text-xs font-medium text-white transition rounded-full bg-slate-800 sm:text-base sm:px-6 hover:bg-slate-700"
         >
           Buy Now
         </Link>
       </div>
 
-      <div className="w-1/3 sm:w-1/4">
+      <div className="w-1/3 overflow-hidden shadow-lg rounded-2xl sm:w-1/4 bg-gray-200/80">
         <ProductImage
-          className="aspect-auto rounded-2xl shadow-lg lg:mx-4"
+          className="aspect-auto"
           url={slide.attributes.url}
           alt={"slider image"}
         />

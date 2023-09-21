@@ -18,8 +18,8 @@ function ReviewsStars({ ratings, reviews, className }) {
 
   return (
     <p className={`flex gap-2 ${className}`}>
-      <span className="flex gap-1 items-center py-1">{renderReviews}</span>
-      <span className="p-1 text-sm">({reviews || 10})</span>
+      <span className="flex items-center gap-1">{renderReviews}</span>
+      <span className="text-sm">({reviews || 10})</span>
     </p>
   );
 }

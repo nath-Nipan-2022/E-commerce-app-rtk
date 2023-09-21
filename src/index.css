@@ -12,4 +12,7 @@
   .filter-panel-wrapper {
     @apply fixed top-0 left-0 z-20 h-screen transition duration-300 bg-white shadow-xl lg:z-0 lg:static lg:h-auto lg:shadow-sm;
   }
+  .nav-dropdown-wrapper {
+    @apply fixed top-0 z-20 w-[calc(100%-20px)] transition duration-300 -translate-x-1/2 bg-white rounded-lg left-1/2 lg:translate-x-0 lg:w-auto lg:static lg:bg-transparent;
+  }
 }

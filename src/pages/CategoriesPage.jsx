@@ -64,7 +64,7 @@ function CategoriesPage() {
         />
       </aside>
       {/* Crucial styles ⭐⭐ */}
-      <section className="w-[calc(100%-208px-24px)]">
+      <section className="lg:w-[calc(100%-208px-24px)]">
         <div className="w-full overflow-hidden rounded-lg bg-fuchsia-300">
           {isLoading ? (
             <Skeleton className={"w-full h-52 border"} />
