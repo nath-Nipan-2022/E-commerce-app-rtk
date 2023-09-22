@@ -12,69 +12,97 @@ function Navbar({ openMenu, onClose }) {
     onClose();
   };
 
+  const renderLinks = navLinks.map((link) => (
+    <li
+      key={link.id}
+      className="relative text-gray-600 rounded group lg:hover:text-slate-900"
+    >
+      {!link.hasDropdown ? (
+        <Link
+          to={link.path}
+          className="block p-1 px-2 hover:bg-[#eaeaea] lg:hover:bg-transparent"
+        >
+          {link.label}
+        </Link>
+      ) : (
+        <>
+          {/* desktop dropdown */}
+          {/* dropdown Label  */}
+          <div
+            onMouseEnter={() => setOpenDropdown(true)}
+            onMouseLeave={() => setOpenDropdown(false)}
+          >
+            <span className="items-center justify-between hidden gap-2 p-1 px-2 cursor-pointer lg:flex">
+              {link.label}{" "}
+              <GoChevronDown
+                className={`transition duration-300 ${
+                  openDropdown ? "translate-y-0.5" : "translate-y-0"
+                }`}
+              />
+            </span>
+          </div>
+
+          <div
+            className="hidden lg:block"
+            onMouseEnter={() => setOpenDropdown(true)}
+            onMouseLeave={() => setOpenDropdown(false)}
+          >
+            <NavLinksDropdown
+              isOpen={openDropdown}
+              onItemClick={() => setOpenDropdown(false)}
+              hasTitle={"Top Categories"}
+              className="pt-4"
+            />
+          </div>
+
+          {/* mobile dropdown */}
+          {/* dropdown Label */}
+          <div onClick={() => setOpenDropdown((prev) => !prev)}>
+            <span className="flex items-center justify-between gap-2 p-1 px-2 cursor-pointer lg:hidden">
+              {link.label}
+              <GoChevronDown
+                className={`transition duration-300 ${
+                  openDropdown ? "rotate-180" : "rotate-0"
+                }`}
+              />
+            </span>
+          </div>
+
+          <div className={`block lg:hidden`}>
+            <NavLinksDropdown
+              isOpen={openDropdown}
+              onItemClick={closeDropdown}
+              hasTitle={"Top Categories"}
+              className={"relative top-0"}
+            />
+          </div>
+        </>
+      )}
+    </li>
+  ));
+
   return (
     <nav className={`absolute lg:relative h-[56px] flex items-center`}>
+      {/* The menu appear on mobile */}
+      <div
+        className={`nav-dropdown-wrapper ${
+          openMenu
+            ? "opacity-100 translate-y-5 visible"
+            : "opacity-0 -translate-y-full invisible"
+        } lg:opacity-100 lg:translate-y-0 lg:visible`}
+      >
+        <ul className="flex flex-col p-3 lg:max-w-7xl lg:flex-row lg:items-center lg:gap-4 lg:p-0">
+          {renderLinks}
+        </ul>
+      </div>
+
       {/* Overlay */}
       {openMenu && (
         <div
-          className="fixed z-20 inset-0 bg-black/50 lg:hidden opacity-0 animate-fadeIn"
+          className="fixed inset-0 z-10 opacity-0 bg-black/50 lg:hidden animate-fadeIn"
           onClick={closeDropdown}
         ></div>
       )}
-      {/* The menu appear on mobile */}
-      <div
-        className={`fixed z-20 left-1/2 -translate-x-1/2 lg:translate-x-0 w-11/12 lg:w-auto lg:static bg-white lg:bg-transparent rounded-lg p-3 lg:p-0 transition duration-300 ${
-          openMenu
-            ? "top-5 opacity-100 translate-y-0"
-            : "top-0 opacity-0 -translate-y-full"
-        } lg:opacity-100 lg:translate-y-0`}
-      >
-        <ul className="lg:max-w-7xl flex flex-col lg:flex-row lg:items-center lg:gap-4 p-3 lg:p-0">
-          {navLinks.map((link) => {
-            return (
-              <li
-                key={link.id}
-                className="group relative rounded text-gray-600 lg:hover:text-slate-900"
-              >
-                {!link.hasDropdown ? (
-                  <Link
-                    to={link.path}
-                    className="block p-1 px-2 hover:bg-[#eaeaea] lg:hover:bg-transparent"
-                  >
-                    {link.label}
-                  </Link>
-                ) : (
-                  <div
-                    className="p-1 px-2 flex items-center gap-2 justify-between cursor-pointer"
-                    onClick={() => setOpenDropdown((prev) => !prev)}
-                  >
-                    {link.label}
-                    <GoChevronDown className="transition duration-500 lg:group-hover:translate-y-1" />
-                  </div>
-                )}
-                {/* dropdown  */}
-                {link.hasDropdown && (
-                  <div
-                    className={`lg:absolute z-20 top-full left-0 lg:pt-4 ${
-                      openDropdown ? "block" : "hidden"
-                    } lg:hidden lg:group-hover:block`}
-                  >
-                    <div className="lg:bg-white lg:border lg:shadow-lg lg:rounded-lg -translate-y-2 lg:-translate-x-2 lg:translate-y-0 opacity-0 animate-popUp transition duration-300">
-                      <h4 className="text-gray-600 p-2 lg:p-3 border-b">
-                        Top Categories
-                      </h4>
-                      <NavLinksDropdown
-                        className="w-full p-2 lg:p-4 grid gap-2 grid-cols-2 lg:grid-cols-dropdown"
-                        childrenClassName="lg:bg-gray-500/5 lg:flex lg:items-center hover:bg-[#f0f0f0] rounded border-[#eaeaea]"
-                      />
-                    </div>
-                  </div>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
     </nav>
   );
 }
