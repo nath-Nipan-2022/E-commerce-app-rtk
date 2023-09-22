@@ -1,14 +1,13 @@
-function ProductImage({ url, alt, ...rest }) {
+function ProductImage({ url, alt, className, ...rest }) {
   return (
-    <figure {...rest} className={`aspect-square rounded-lg overflow-hidden`}>
-      <img
-        src={import.meta.env.VITE_REACT_APP_UPLOAD_URL + url}
-        alt={alt}
-        width={300}
-        height={300}
-        className={`object-cover object-center w-full h-full ${rest.className} `}
-      ></img>
-    </figure>
+    <img
+      src={import.meta.env.VITE_REACT_APP_UPLOAD_URL + url}
+      alt={alt}
+      width={300}
+      height={300}
+      {...rest}
+      className={`object-cover object-center w-full h-full ${className}`}
+    ></img>
   );
 }
 
