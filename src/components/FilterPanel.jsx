@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Skeleton from "./Skeleton";
 import RatingStarsInputs from "./Rating/RatingStarsInputs";
+import { useSearchParams } from "react-router-dom";
 
 function FilterPanel({
   products,
@@ -13,6 +14,8 @@ function FilterPanel({
 }) {
   let maxAmount = getMaxPrice(products);
   const [maxPrice, setMaxPrice] = useState(maxAmount);
+
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     setMaxPrice(getMaxPrice(products));
@@ -27,6 +30,9 @@ function FilterPanel({
     setPriceOrder(order);
   };
 
+  const selectedSubCats = searchParams.get("sub-cats")?.split(",") ?? [];
+  const selectedPriceOrder = searchParams.get("price-order");
+
   const renderSubCatsInputs = subCats?.data.map((input) => {
     const { name } = input.attributes;
     return (
@@ -36,6 +42,7 @@ function FilterPanel({
           onChange={() => onSubCatsChange(name)}
           id={name}
           name={name}
+          checked={selectedSubCats.some((value) => value === name)}
         />
         <label
           htmlFor={name}
@@ -49,8 +56,6 @@ function FilterPanel({
 
   return (
     <section className={className}>
-      {/* <h3 className="p-4 border border-b-0 font-medium rounded-t-lg">Filter</h3> */}
-
       <article className="p-4 border border-b-0 rounded-t-lg">
         <h3 className="font-medium">Categories</h3>
         {subCats?.data ? (
@@ -67,16 +72,16 @@ function FilterPanel({
 
       <article className="p-4 border border-b-0">
         <h3 className="font-medium">Price range</h3>
-        <p className="text-gray-600 flex items-center justify-between my-2">
+        <p className="flex items-center justify-between my-2 text-gray-600">
           <label>Min</label>
           <label>Max</label>
         </p>
-        <div className="flex gap-3 items-center justify-between mb-2">
-          <output className="rounded-lg border py-1 px-3">
+        <div className="flex items-center justify-between gap-3 mb-2">
+          <output className="px-3 py-1 border rounded-lg">
             <span className="mr-0.5">$</span>
             {0}
           </output>
-          <output className="rounded-lg border py-1 px-3">
+          <output className="px-3 py-1 border rounded-lg">
             <span className="mr-0.5">$</span>
             {maxPrice || maxAmount}
           </output>
@@ -94,29 +99,31 @@ function FilterPanel({
 
       <article className="p-4 border rounded-b-lg">
         <h3 className="font-medium">Sort by</h3>
-        <div className="flex gap-2 items-center my-2">
+        <div className="flex items-center gap-2 my-2">
           <input
             type="radio"
             name="sort-price"
             id="lowest-first"
             onChange={() => handlePriceOrderChange("asc")}
+            checked={selectedPriceOrder === "asc"}
           />
           <label
-            className=" text-gray-600 hover:text-gray-800 cursor-pointer w-full"
+            className="w-full text-gray-600 cursor-pointer hover:text-gray-800"
             htmlFor="lowest-first"
           >
             Price ( Lowest First )
           </label>
         </div>
-        <div className="flex gap-2 items-center my-2">
+        <div className="flex items-center gap-2 my-2">
           <input
             type="radio"
             name="sort-price"
             id="highest-first"
             onChange={() => handlePriceOrderChange("desc")}
+            checked={selectedPriceOrder === "desc"}
           />
           <label
-            className=" text-gray-600 hover:text-gray-800 cursor-pointer w-full"
+            className="w-full text-gray-600 cursor-pointer hover:text-gray-800"
             htmlFor="highest-first"
           >
             Price ( Highest First )
