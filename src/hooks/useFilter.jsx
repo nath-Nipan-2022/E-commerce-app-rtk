@@ -1,27 +1,34 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const useFilter = (products) => {
-  // use a state to store the filtered sub categories
-  const [filterSubCats, setFilterSubCats] = useState([]);
-  // state to know whether priceRange is selected / not
   const [priceRange, setPriceRange] = useState(null);
-  // state to store the price order
-  const [priceOrder, setPriceOrder] = useState(null);
-  // state to store the ratings
-  const [ratings, setRatings] = useState(null);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const subCats = searchParams.get("sub-cats")?.split(",") ?? [];
+  const priceOrder = searchParams.get("price-order");
+  const ratingsAbove = searchParams.get("ratings-above");
 
   // change the sub-categories state 🔥
-  const handleSubCatsChange = (value) => {
-    if (filterSubCats.includes(value)) {
-      setFilterSubCats(filterSubCats.filter((item) => item !== value));
+  const handleSubCatsChange = (subCat) => {
+    if (subCats.includes(subCat)) {
+      subCats.splice(subCats.indexOf(subCat), 1);
     } else {
-      setFilterSubCats([...filterSubCats, value]);
+      subCats.push(subCat);
     }
+    if (!subCats.length) {
+      searchParams.delete("sub-cats");
+      setSearchParams(searchParams, { replace: true });
+      return;
+    }
+    searchParams.set("sub-cats", subCats.join(","));
+    setSearchParams(searchParams, { replace: true });
   };
 
   //Filter the products acc. to the filtered sub-categories 🔥👌
   let filteredProducts = products?.data.filter((product) => {
-    if (filterSubCats.length === 0) {
+    if (subCats.length === 0) {
       return true; // No sub-category filter, so all products match
     }
 
@@ -29,7 +36,7 @@ const useFilter = (products) => {
       product.attributes.sub_categories.data.map((item) => item.attributes.name)
     );
 
-    for (const subCatName of filterSubCats) {
+    for (const subCatName of subCats) {
       if (subCatNames.has(subCatName)) {
         return true; // At least one matching sub-category found
       }
@@ -46,20 +53,35 @@ const useFilter = (products) => {
   }
 
   // filter by price order
+  const setPriceOrder = (order) => {
+    searchParams.set("price-order", order);
+    setSearchParams(searchParams, { replace: true });
+  };
+
   if (priceOrder) {
     let order = priceOrder === "asc" ? 1 : -1;
 
-    filteredProducts = filteredProducts.sort((a, b) => {
+    filteredProducts = filteredProducts?.sort((a, b) => {
       const priceA = a.attributes.price;
       const priceB = b.attributes.price;
       return (priceA - priceB) * order;
     });
   }
 
+  const setRatings = (ratings) => {
+    if (!ratings) {
+      searchParams.delete("ratings-above");
+      setSearchParams(searchParams, { replace: true });
+      return;
+    }
+    searchParams.set("ratings-above", ratings);
+    setSearchParams(searchParams, { replace: true });
+  };
+
   // filer by ratings
-  if (ratings) {
+  if (ratingsAbove) {
     filteredProducts = filteredProducts?.filter((product) => {
-      return product.attributes.ratings >= ratings;
+      return product.attributes.ratings >= ratingsAbove;
     });
   }
 
