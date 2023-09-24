@@ -1,6 +1,6 @@
 import { useGetProductsQuery } from "../../store/apis/productsApi";
 import ProductsListItem from "./ProductsListItem";
-import Skeleton from "../Skeleton";
+import { ProductsListItemSkeleton } from "./ProductsListItemSkeleton";
 
 function ProductsList({ type }) {
   const { data, isLoading, error } = useGetProductsQuery(
@@ -13,11 +13,7 @@ function ProductsList({ type }) {
 
   return (
     <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4 xl:gap-x-8">
-      {isLoading ? (
-        <Skeleton times={8} className={"h-44 md:h-52 m-2 rounded-md"} />
-      ) : (
-        renderProducts
-      )}
+      {isLoading ? <ProductsListItemSkeleton times={8} /> : renderProducts}
       {error && "Error loading products"}
     </div>
   );
