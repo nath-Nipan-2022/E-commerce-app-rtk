@@ -1,22 +1,20 @@
 {
-  "name": "rtk-query-media-app",
+  "name": "e-commerce-app-rtk-query",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "server": "json-server --watch db.json --port 3005",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@faker-js/faker": "^8.0.2",
     "@reduxjs/toolkit": "^1.9.5",
     "classnames": "^2.3.2",
-    "json-server": "^0.17.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
     "react-icons": "^4.10.1",
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.14.1"
@@ -31,8 +29,6 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
     "postcss": "^8.4.24",
-    "prettier": "^3.0.0",
-    "prettier-plugin-tailwindcss": "^0.4.1",
     "tailwindcss": "^3.3.2",
     "vite": "^4.3.9"
   }
