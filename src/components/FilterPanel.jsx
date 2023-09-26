@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Skeleton from "./Skeleton";
 import RatingStarsInputs from "./Rating/RatingStarsInputs";
 import { useSearchParams } from "react-router-dom";
+import Chip from "./Chip";
+import Panel from "./Panel";
 
 function FilterPanel({
   products,
@@ -10,6 +12,8 @@ function FilterPanel({
   setPriceRange,
   setPriceOrder,
   setRatings,
+  colors,
+  onColorChange,
   className,
 }) {
   let maxAmount = getMaxPrice(products);
@@ -32,9 +36,10 @@ function FilterPanel({
 
   const selectedSubCats = searchParams.get("sub-cats")?.split(",") ?? [];
   const selectedPriceOrder = searchParams.get("price-order");
+  const selectedColor = searchParams.get("color");
 
-  const renderSubCatsInputs = subCats?.data.map((input) => {
-    const { name } = input.attributes;
+  const renderSubCatsInputs = subCats?.data.map((sub_cat) => {
+    const { name } = sub_cat.attributes;
     return (
       <div key={name} className={`flex gap-2 items-center my-2`}>
         <input
@@ -54,12 +59,35 @@ function FilterPanel({
     );
   });
 
+  const renderColors = colors?.data?.map((color) => {
+    const { name, code } = color.attributes;
+    const activeClass =
+      name === selectedColor
+        ? "border-accent-blue"
+        : "group-hover:border-accent-blue";
+
+    return (
+      <li
+        key={color.id}
+        className={`group ${
+          code === "#000000" ? "text-neutral-100" : "text-slate-900"
+        }`}
+      >
+        <Chip
+          text={name}
+          onClick={() => onColorChange(name)}
+          className={`w-14 h-6 rounded-md capitalize border-2 ${activeClass}`}
+          style={{ backgroundColor: `${code}` }}
+        />
+      </li>
+    );
+  });
+
   return (
     <section className={className}>
-      <article className="p-4 border border-b-0 rounded-t-lg">
-        <h3 className="font-medium">Categories</h3>
+      <Panel title={"Categories"} className="rounded-t-lg">
         {subCats?.data ? (
-          <div>{renderSubCatsInputs}</div>
+          renderSubCatsInputs
         ) : (
           <div className="my-2">
             <Skeleton className={"h-2 my-2"} />
@@ -68,10 +96,8 @@ function FilterPanel({
             <Skeleton className={"w-1/2 h-2"} />
           </div>
         )}
-      </article>
-
-      <article className="p-4 border border-b-0">
-        <h3 className="font-medium">Price range</h3>
+      </Panel>
+      <Panel title={"Price range"}>
         <p className="flex items-center justify-between my-2 text-gray-600">
           <label>Min</label>
           <label>Max</label>
@@ -93,12 +119,14 @@ function FilterPanel({
           onChange={handlePriceChange}
           className="w-full h-2.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-slate-700"
         />
-      </article>
-
+      </Panel>
       <RatingStarsInputs onChange={setRatings} />
-
-      <article className="p-4 border rounded-b-lg">
-        <h3 className="font-medium">Sort by</h3>
+      {colors?.data?.length > 0 && (
+        <Panel title={"Colors"} className="border-b-0">
+          <ul className={`flex gap-2 flex-wrap`}>{renderColors}</ul>
+        </Panel>
+      )}
+      <Panel title={"Sort by"} className="lg:rounded-b-lg">
         <div className="flex items-center gap-2 my-2">
           <input
             type="radio"
@@ -129,7 +157,7 @@ function FilterPanel({
             Price ( Highest First )
           </label>
         </div>
-      </article>
+      </Panel>
     </section>
   );
 }

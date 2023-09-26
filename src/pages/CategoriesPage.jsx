@@ -8,11 +8,14 @@ import { ProductsListItem } from "../components/Product";
 import Skeleton from "../components/Skeleton";
 import Slider from "../components/Slider";
 import { GoFilter } from "react-icons/go";
+import { ProductsListItemSkeleton } from "../components/Product/ProductsListItemSkeleton";
+import NotFoundSvg from "../assets/not_found.svg";
 
 // hooks
 import useFilter from "../hooks/useFilter";
 import {
   useGetACategoryQuery,
+  useGetColorsQuery,
   useGetSubcategoriesQuery,
 } from "../store/apis/categoriesApi";
 
@@ -23,12 +26,15 @@ function CategoriesPage() {
   // get the products matching the category
   const {
     data: products,
-    isLoading,
+    isFetching,
     error,
   } = useGetACategoryQuery("?populate=*&" + category);
 
   // get the sub categories associated with the category
   const { data: subCats } = useGetSubcategoriesQuery("?" + category);
+
+  // get the colors associated with the category
+  const { data: colors } = useGetColorsQuery("?" + category);
 
   const {
     filteredProducts,
@@ -36,6 +42,7 @@ function CategoriesPage() {
     setPriceOrder,
     setPriceRange,
     setRatings,
+    onColorChange,
   } = useFilter(products);
 
   // use the filtered values
@@ -43,14 +50,15 @@ function CategoriesPage() {
     return <ProductsListItem key={product.id} product={product} />;
   });
 
-  // for mobile devices to toggle filter panel
-  const [showPanel, setShowFilterPanel] = useState(false);
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
 
   return (
     <div className="flex flex-col gap-6 lg:flex-row">
       <aside
         className={`flex-shrink-0 filter-panel-wrapper ${
-          showPanel ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          showFilterPanel
+            ? "translate-x-0"
+            : "-translate-x-full lg:translate-x-0"
         }`}
       >
         <FilterPanel
@@ -60,13 +68,15 @@ function CategoriesPage() {
           setPriceRange={setPriceRange}
           setPriceOrder={setPriceOrder}
           setRatings={setRatings}
+          onColorChange={onColorChange}
+          colors={colors}
           className={`lg:sticky lg:top-[72px] w-52`}
         />
       </aside>
       {/* Crucial styles ⭐⭐ */}
       <section className="lg:w-[calc(100%-208px-24px)]">
-        <div className="w-full overflow-hidden rounded-lg bg-fuchsia-300">
-          {isLoading ? (
+        <div className="w-full overflow-hidden rounded-lg bg-fuchsia-300 dark:bg-fuchsia-400">
+          {isFetching ? (
             <Skeleton className={"w-full h-52 border"} />
           ) : (
             <Slider
@@ -76,34 +86,48 @@ function CategoriesPage() {
           )}
         </div>
         <article className="w-full mx-auto">
-          <h2 className="flex items-center justify-between my-6">
-            <span className="text-2xl font-medium">
-              Trending {type} For You
-            </span>
+          <h2 className="flex items-center justify-between gap-2 mt-4 lg:justify-center">
+            <span className="text-h2">Trending {type} For You</span>
             {/* FilterPanel Toggler */}
             <Button
-              className="bg-rose-100/50 lg:hidden py-1 px-3.5 rounded-3xl gap-2"
+              rounded
+              className="gap-1 pl-2 pr-3 text-white bg-accent-slate-blue h-7 hover:opacity-80 lg:hidden"
               onClick={() => setShowFilterPanel(true)}
             >
               <GoFilter />
-              <span>Filter</span>
+              <span className="text-sm">Filter</span>
             </Button>
           </h2>
           {/* render the filtered data here */}
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 lg:grid-cols-4 xl:gap-x-8">
-            {isLoading ? (
-              <Skeleton times={4} className={"h-44 md:h-52 m-2 rounded-md"} />
+            {isFetching ? (
+              <ProductsListItemSkeleton times={4} />
             ) : (
               renderCategoryProducts
             )}
             {error && "Error loading category products"}
           </div>
+          {/* If No data found */}
+          {filteredProducts?.length === 0 && (
+            <div className="h-[344px] w-60 mx-auto">
+              <figure>
+                <img
+                  src={NotFoundSvg}
+                  alt="not found"
+                  width={200}
+                  height={300}
+                  className="w-full h-full"
+                />
+              </figure>
+              <h6 className="py-2 text-center">No data found.</h6>
+            </div>
+          )}
         </article>
 
         {/* modal background */}
-        {showPanel && (
+        {showFilterPanel && (
           <div
-            className="fixed inset-0 z-10 opacity-0 bg-black/70 animate-fadeIn"
+            className="fixed inset-0 z-10 opacity-0 bg-black/70 animate-fadeIn dark:bg-slate-800/50"
             onClick={() => setShowFilterPanel(false)}
           ></div>
         )}
