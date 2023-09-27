@@ -9,6 +9,7 @@ const useFilter = (products) => {
   const subCats = searchParams.get("sub-cats")?.split(",") ?? [];
   const priceOrder = searchParams.get("price-order");
   const ratingsAbove = searchParams.get("ratings-above");
+  const color = searchParams.get("color");
 
   // change the sub-categories state 🔥
   const handleSubCatsChange = (subCat) => {
@@ -85,12 +86,32 @@ const useFilter = (products) => {
     });
   }
 
+  const onColorChange = (newColor) => {
+    if (color === newColor) {
+      searchParams.delete("color");
+      setSearchParams(searchParams, { replace: true });
+      return;
+    }
+    searchParams.set("color", newColor);
+    setSearchParams(searchParams, { replace: true });
+  };
+
+  // filter by color
+  if (color) {
+    filteredProducts = filteredProducts.filter((product) => {
+      return product.attributes.colors.data.some((clr) => {
+        return clr.attributes.name === color;
+      });
+    });
+  }
+
   return {
     handleSubCatsChange,
     filteredProducts,
     setPriceOrder,
     setPriceRange,
     setRatings,
+    onColorChange,
   };
 };
 
