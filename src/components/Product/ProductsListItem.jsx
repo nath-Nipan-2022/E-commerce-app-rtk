@@ -26,21 +26,23 @@ function ProductsListItem({ product }) {
   };
 
   return (
-    <div className="relative rounded-md cursor-pointer group lg:hover:ring lg:hover:ring-slate-100 lg:p-2 lg:pb-3">
+    <div className="relative rounded-md cursor-pointer group">
       <Link to={`/products/${product.id}`}>
-        <ProductImage
-          product={product}
-          url={images.data[0].attributes.url}
-          className="transition-transform duration-300 rounded-md group-hover:scale-105"
-        />
-        <article className="mt-2 font-medium text-gray-800 lg:px-2">
-          <h3 className="leading-snug lg:text-lg">{name}</h3>
+        <figure className="overflow-hidden rounded-md aspect-square">
+          <ProductImage
+            url={images.data[0].attributes.url}
+            alt={product.desc}
+            className="transition-transform duration-300 group-hover:scale-105"
+          />
+        </figure>
+        <article className="mt-2 text-sm font-medium text-gray-800">
+          <h3 className="leading-tight lg:text-lg">{name}</h3>
           <ReviewsStars reviews={reviews} ratings={ratings} />
-          <p className="mt-1 mb-2 text-lg text-slate-700">${price}</p>
+          <p className="my-2 lg:text-lg text-slate-700">${price}</p>
         </article>
       </Link>
       <Button
-        className="lg:m-2 hover:bg-slate-900 hover:border-slate-900 hover:text-white py-1.5 px-3 sm:px-4 text-xs lg:text-base rounded-lg border border-gray-300 active:scale-95 transition"
+        className="hover:bg-slate-900 hover:border-slate-900 hover:text-white py-1.5 px-3 sm:px-4 text-xs lg:text-base rounded-lg border border-gray-300 active:scale-95 transition"
         onClick={addToCart}
       >
         Add to Cart

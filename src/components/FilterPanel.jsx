@@ -85,7 +85,10 @@ function FilterPanel({
 
   return (
     <section className={className}>
-      <Panel title={"Categories"} className="rounded-t-lg">
+      <Panel
+        title={"Categories"}
+        className="p-4 border border-b-0 lg:rounded-t-lg"
+      >
         {subCats?.data ? (
           renderSubCatsInputs
         ) : (
@@ -97,7 +100,7 @@ function FilterPanel({
           </div>
         )}
       </Panel>
-      <Panel title={"Price range"}>
+      <Panel title={"Price range"} className="p-4 border border-b-0">
         <p className="flex items-center justify-between my-2 text-gray-600">
           <label>Min</label>
           <label>Max</label>
@@ -122,11 +125,11 @@ function FilterPanel({
       </Panel>
       <RatingStarsInputs onChange={setRatings} />
       {colors?.data?.length > 0 && (
-        <Panel title={"Colors"} className="border-b-0">
+        <Panel title={"Colors"} className="p-4 border border-b-0">
           <ul className={`flex gap-2 flex-wrap`}>{renderColors}</ul>
         </Panel>
       )}
-      <Panel title={"Sort by"} className="lg:rounded-b-lg">
+      <Panel title={"Sort by"} className="p-4 border border-b lg:rounded-b-lg">
         <div className="flex items-center gap-2 my-2">
           <input
             type="radio"

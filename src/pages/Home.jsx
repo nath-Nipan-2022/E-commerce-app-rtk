@@ -14,7 +14,7 @@ function Home() {
 
   return (
     <div>
-      <section className="overflow-hidden rounded-lg max-container bg-rose-300">
+      <section className="overflow-hidden rounded-lg max-container bg-[#ff9d85]">
         {isLoading ? (
           <Skeleton className={"w-full h-36 sm:h-44 lg:h-72 border"} />
         ) : (
@@ -28,7 +28,7 @@ function Home() {
         <ProductsList type="trending" />
       </section>
 
-      <section className="mt-4 rounded max-container">
+      <section className="py-8 rounded max-container">
         <h2 className="text-h2">Shop Our Top Categories </h2>
         <CategorySection />
       </section>

@@ -5,9 +5,11 @@ import {
   decrementQuantity,
   removeCart,
 } from "../../store/slices/cartsSlice";
+
 import Counter from "../Counter";
 import { ProductImage } from "../Product";
 import { toast } from "react-hot-toast";
+import { toastStyles } from "../../constants/toastStyles";
 
 function Cart({ className, cartItem }) {
   const { name, price, images, desc } = cartItem.attributes;
@@ -15,51 +17,44 @@ function Cart({ className, cartItem }) {
   const dispatch = useDispatch();
 
   const increment = () => {
-    dispatch(incrementQuantity(cartItem)); // <- action object is different
+    dispatch(incrementQuantity(cartItem));
   };
 
   const decrement = () => {
-    dispatch(decrementQuantity(cartItem)); // <- action object is different
+    dispatch(decrementQuantity(cartItem));
   };
 
   const handleRemove = () => {
     dispatch(removeCart(cartItem));
     toast(`Item removed from Cart!`, {
       icon: "❗",
-      style: {
-        border: "1px solid #9a9aaa",
-        background: "#1b1b1b",
-        color: "#f5f5f5",
-      },
+      style: toastStyles,
     });
   };
 
   return (
     <div className={`flex items-center gap-4 ${className}`}>
-      <ProductImage
-        className="w-14 h-14 rounded"
-        url={images.data[0].attributes.url}
-        alt={desc}
-      />
+      <figure className="overflow-hidden rounded-md w-14 h-14 shrink-0">
+        <ProductImage url={images.data[0].attributes.url} alt={desc} />
+      </figure>
       <article className="flex-1">
-        <h3 className="mb-2 text-gray-700 flex gap-1 justify-between">
-          {name}
+        <h3 className="flex justify-between gap-1 mb-2">
+          <span className="overflow-hidden max-h-11">{name}</span>
           <div
             onClick={handleRemove}
-            className="w-6 h-6 grid place-items-center cursor-pointer group"
+            className="grid w-6 h-6 cursor-pointer place-items-center group"
           >
             <GoX className="text-gray-500 group-hover:text-gray-900" />
           </div>
         </h3>
-        <div className="mt-2 flex gap-2 justify-between items-center">
-          {/* counter*/}
+        <div className="flex items-center justify-between gap-2 mt-2">
           <Counter
-            className={"border rounded-md"}
+            className={"border h-7 font-semibold"}
             count={cartItem.quantity}
             onIncrement={increment}
             onDecrement={decrement}
           />
-          <p>${price}</p>
+          <p className="text-sm">${price}</p>
         </div>
       </article>
     </div>

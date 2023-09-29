@@ -1,57 +1,61 @@
-import { FiUser, FiShoppingCart, FiMenu } from "react-icons/fi";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import Navbar from "./Nav/Navbar";
-import CartList from "./Cart/CartList";
-import SearchForm from "./Search/SearchForm";
-import logo from "../assets/shopping logo.png";
+import { FiMenu, FiShoppingCart, FiUser, FiX } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
+import logo from "../assets/shopping logo.png";
+import CartList from "./Cart/CartList";
+import Navbar from "./Nav/Navbar";
+import SearchResults from "./Search/SearchResults";
+import Chip from "./Chip";
 
 function Header() {
   const [openMenu, setOpenMenu] = useState(false);
   const [openCartList, setOpenCartList] = useState(false);
   const cartQuantity = useSelector((state) => state.carts.list.length);
 
-  const onMenuClose = () => {
+  const toggleMenu = () => {
     setOpenMenu((prev) => !prev);
   };
 
   return (
-    <header className="sticky top-0 z-10 bg-white">
-      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center p-2">
+    <header className="sticky top-0 z-10 bg-background-primary">
+      <div className="flex items-center justify-between p-2 px-5 mx-auto max-w-7xl">
         <Link to={"/"} className="flex items-center ">
           <img src={logo} alt="company logo" width={44} title="Company logo" />
           <span className="text-xl ">ShopCart</span>
         </Link>
 
-        <Navbar openMenu={openMenu} onClose={onMenuClose} />
+        <Navbar openMenu={openMenu} onClose={toggleMenu} />
 
-        <SearchForm className={"sm:w-60 ml-auto sm:ml-0 lg:w-auto"} />
+        <SearchResults />
 
-        <div className="flex items-center gap-1 md:gap-4 ">
+        <div className="flex items-center gap-1">
           <Link
             to={"/account"}
             className="flex items-center gap-2 p-1 px-1.5 rounded text-gray-600 hover:text-slate-900"
           >
             <FiUser />
-            <span className="hidden lg:inline-block leading-8">Account</span>
           </Link>
           <div
             className="flex items-center gap-2 p-1 px-1.5 rounded  cursor-pointer text-gray-600 hover:text-slate-900"
             onClick={() => setOpenCartList(true)}
           >
-            <div className="relative">
+            <div className="relative" title="cart list">
               <FiShoppingCart />
-              <span className="absolute -top-1/2 -right-1/2 w-4 h-4 text-[10px] grid place-items-center rounded-full bg-blue-600 text-white font-medium">
-                {cartQuantity}
-              </span>
+              <Chip
+                className={`absolute w-4 h-4 -top-1/2 -right-1/2 text-xs rounded-full bg-accent-blue text-white`}
+                text={cartQuantity}
+              />
             </div>
-            <span className="hidden lg:inline-block leading-8">Cart</span>
           </div>
-          <FiMenu
-            className="block cursor-pointer lg:hidden ml-1 text-gray-600 hover:text-slate-900"
-            onClick={onMenuClose}
-          />
+          <div
+            onClick={toggleMenu}
+            className="block py-1 pl-1.5 text-gray-600 cursor-pointer lg:hidden hover:text-slate-900"
+          >
+            {!openMenu ? <FiMenu /> : <FiX />}
+            <span className="sr-only">menu icon</span>
+          </div>
         </div>
         {openCartList && <CartList onClose={() => setOpenCartList(false)} />}
       </div>
