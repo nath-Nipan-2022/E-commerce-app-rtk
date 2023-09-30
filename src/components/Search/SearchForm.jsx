@@ -1,17 +1,13 @@
 import { useState } from "react";
-import { GoSearch } from "react-icons/go";
+import { FiSearch } from "react-icons/fi";
 
-function SearchForm({ onChange, onSubmit, className, ...rest }) {
-  const [query, setQuery] = useState("");
-
+function SearchForm({ value, onChange, onSubmit, className, ...rest }) {
   const onInputChange = (e) => {
-    setQuery(e.target.value);
     onChange(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setQuery("");
     onSubmit();
   };
 
@@ -19,7 +15,7 @@ function SearchForm({ onChange, onSubmit, className, ...rest }) {
     <form onSubmit={handleSubmit} className={`relative ${className}`}>
       <input
         type="search"
-        value={query}
+        value={value}
         id="product-search"
         placeholder="Search Products"
         className="search-input"
@@ -27,7 +23,7 @@ function SearchForm({ onChange, onSubmit, className, ...rest }) {
         {...rest}
       />
       <span className="search-icon-wrapper">
-        <GoSearch />
+        <FiSearch />
       </span>
     </form>
   );

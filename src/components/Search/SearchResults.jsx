@@ -1,25 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import { useGetProductsQuery } from "../../store/apis/productsApi";
-import { GoSearch } from "react-icons/go";
+import { FiSearch } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import SearchForm from "./SearchForm";
 
+const initState = {
+  value: "",
+  isOpen: false,
+  selectedIndex: 0,
+};
+
 function SearchResults() {
-  const [searchValue, setSearchValue] = useState("");
-  const [openSearch, setOpenSearch] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [state, setState] = useState(initState);
+  const ref = useRef();
 
-  const mobileSearchBarRef = useRef();
-
-  // close search bar when clicking outside
   useEffect(() => {
     const handler = (e) => {
-      if (!mobileSearchBarRef.current.contains(e.target)) {
-        setOpenSearch(false);
-        setSelectedIndex(0);
-        setSearchValue("");
-      } else {
-        setOpenSearch(true);
+      if (!ref.current || e.target.tagName === "A") return; // Link tag reloads page.
+      if (!ref.current.contains(e.target)) {
+        setState((prev) => ({ ...prev, isOpen: false, selectedIndex: 0 }));
       }
     };
     document.addEventListener("click", handler, true);
@@ -28,7 +27,7 @@ function SearchResults() {
     return () => {
       document.removeEventListener("click", handler, true);
     };
-  }, [openSearch]);
+  }, []);
 
   const { data: products } = useGetProductsQuery("?populate=*&");
 
@@ -37,75 +36,91 @@ function SearchResults() {
 
   const filteredProducts = products?.data.filter((pdt) =>
     FILTER_ARR.some((key) =>
-      pdt.attributes[key].toLowerCase().includes(searchValue.toLowerCase())
+      pdt.attributes[key].toLowerCase().includes(state.value.toLowerCase())
     )
   );
 
   const handleKeyBoardNavigation = (e) => {
     if (e.key === "ArrowDown") {
-      setSelectedIndex((index) =>
-        Math.min(index + 1, filteredProducts.length - 1)
+      let index = Math.min(
+        state.selectedIndex + 1,
+        filteredProducts.length - 1
       );
+      setState({ ...state, selectedIndex: index });
     } else if (e.key === "ArrowUp") {
-      setSelectedIndex((index) => Math.max(index - 1, 0));
+      let index = Math.max(state.selectedIndex - 1, 0);
+      setState({ ...state, selectedIndex: index });
     }
   };
 
   const navigate = useNavigate();
   const handleSubmit = () => {
-    setSearchValue("");
-    navigate(`/products/${filteredProducts[selectedIndex].id}`);
-    setSelectedIndex(0);
-    setOpenSearch(false);
+    navigate(`/products/${filteredProducts[state.selectedIndex].id}`);
+    setState({
+      ...state,
+      value: "",
+    });
   };
 
-  const hasProducts = searchValue && filteredProducts.length > 0;
-
   const renderSearchResults = filteredProducts?.map((product, index) => {
-    // check selected index === product's index
-    const isMatched = selectedIndex === index;
+    const isActive = state.selectedIndex === index;
+
     return (
-      <li key={product.id}>
+      <li key={product.id} className="relative">
         <Link
-          to={"/products/" + product.id}
-          onClick={() => setSearchValue("")}
+          to={`/products/${product.id}`}
+          onClick={() =>
+            setState({
+              ...state,
+              value: product.attributes.name,
+              isOpen: false,
+            })
+          }
           className={`py-1.5 px-5 font-medium block border-l-2 hover:bg-black/5 ${
-            // add special class
-            isMatched ? "border-blue-500 bg-black/5" : "border-transparent"
+            isActive ? "border-blue-500 bg-black/5" : "border-transparent"
           }`}
         >
           {product.attributes.name}
         </Link>
+        {/* indicator */}
+        <span
+          className={`absolute top-0 left-0 hidden w-1 h-full md:block rounded-[0_8px_8px_0] bg-accent-blue ${
+            isActive ? "opacity-100" : "opacity-0"
+          }`}
+        ></span>
       </li>
     );
   });
 
+  const hasProducts =
+    state.value && state.isOpen && filteredProducts.length > 0;
+
   return (
     <div className="relative min-h-[44px] ml-auto md:ml-0">
       <div
-        className={`fixed top-0 py-3 md:py-0 left-0 w-full opacity-0 -translate-y-full transition bg-white lg:bg-transparent md:static md:opacity-100 md:translate-y-0 ${
-          openSearch ? "opacity-100 translate-y-0" : ""
+        className={`fixed z-10 top-0 py-3 md:py-0 left-0 w-full opacity-0 -translate-y-full transition bg-background-primary lg:bg-transparent md:static md:opacity-100 md:translate-y-0 ${
+          state.isOpen ? "opacity-100 translate-y-0" : ""
         }`}
       >
         {/* desktop search */}
         <SearchForm
-          onChange={(value) => setSearchValue(value)}
+          value={state.value}
+          onChange={(value) => setState({ ...state, value })}
           onSubmit={handleSubmit}
           onKeyDown={handleKeyBoardNavigation}
+          onClick={() => setState({ ...state, isOpen: true })}
           className={"hidden md:block"}
         />
 
         {/* mobile search */}
-        {openSearch && (
-          <div
-            className="flex justify-center md:hidden"
-            ref={mobileSearchBarRef}
-          >
+        {state.isOpen && (
+          <div className="flex justify-center md:hidden" ref={ref}>
             <SearchForm
               id="product-search_mobile"
               autoFocus={true}
+              value={state.value}
               onSubmit={handleSubmit}
-              onChange={(value) => setSearchValue(value)}
+              onChange={(value) => setState({ ...state, value })}
               onKeyDown={handleKeyBoardNavigation}
             />
           </div>
@@ -113,20 +128,24 @@ function SearchResults() {
 
         {/* Results box */}
         {hasProducts && (
-          <ul className="translate-y-2 search-results-box animate-slideIn">
-            {renderSearchResults}
-          </ul>
+          <div className="search-results-box">
+            <ul className="flex flex-col divide-y animate-slideIn divide-neutral-100">
+              {renderSearchResults}
+            </ul>
+          </div>
         )}
       </div>
 
       {/* search icon */}
       <span
-        className={`search-icon-wrapper 0 md:hidden ${
-          openSearch ? "hidden" : ""
+        className={`search-icon-wrapper z-10 md:hidden ${
+          state.isOpen
+            ? "hidden"
+            : "text-gray-600 hover:text-slate-900 cursor-pointer"
         }`}
-        onClick={() => setOpenSearch(true)}
+        onClick={() => setState({ ...state, isOpen: true })}
       >
-        <GoSearch />
+        <FiSearch />
       </span>
     </div>
   );
