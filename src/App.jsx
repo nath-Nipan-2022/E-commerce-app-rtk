@@ -7,7 +7,7 @@ import { ScrollToTop } from "./helper";
 
 const Layout = () => {
   return (
-    <div className="font-poppins">
+    <div className="font-Nunito bg-background-primary text-foreground">
       <Header />
       <main className="px-6 mx-auto max-w-7xl">
         <ScrollToTop />
@@ -21,7 +21,6 @@ const Layout = () => {
 
 const router = createBrowserRouter([
   {
-    path: "/",
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [

@@ -2,17 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background-primary: #fff;
+  --background-secondary: #f1f1f6;
+  --foreground: #111;
+  --accent-slate-blue: #151e28;
+  --accent-blue: #5c6bc0;
+}
+
 @layer base {
   .max-container {
     @apply max-w-3xl mx-auto lg:max-w-7xl;
   }
   .text-h2 {
-    @apply mb-4 text-lg font-medium sm:text-2xl lg:mb-8;
+    @apply py-2.5 mb-4 text-xl font-medium sm:text-4xl lg:mb-8;
   }
   .filter-panel-wrapper {
-    @apply fixed top-0 left-0 z-20 h-screen transition duration-300 bg-white shadow-xl lg:z-0 lg:static lg:h-auto lg:shadow-sm;
+    @apply fixed top-0 left-0 z-20 h-screen overflow-y-scroll transition duration-300 bg-white shadow-xl lg:overflow-visible lg:z-0 lg:static lg:h-auto lg:shadow-none;
   }
   .nav-dropdown-wrapper {
     @apply fixed top-0 z-20 w-[calc(100%-20px)] transition duration-300 -translate-x-1/2 bg-white rounded-lg left-1/2 lg:translate-x-0 lg:w-auto lg:static lg:bg-transparent;
+  }
+  .search-results-box {
+    @apply absolute left-1/2 top-full md:top-[calc(100%+20px)] w-full md:w-[300px] -translate-x-1/2 py-2 bg-white shadow-2xl md:rounded-lg border-t md:border-t-0;
+  }
+  .search-input {
+    @apply py-1.5 md:py-2 px-4 pr-10 outline-none rounded-3xl bg-neutral-100 border-2 border-transparent hover:border-accent-blue focus:border-accent-blue;
+  }
+  .search-icon-wrapper {
+    @apply absolute top-0 right-0 grid w-10 h-full text-gray-500 select-none place-items-center;
   }
 }

@@ -91,7 +91,7 @@ function Navbar({ openMenu, onClose }) {
             : "opacity-0 -translate-y-full invisible"
         } lg:opacity-100 lg:translate-y-0 lg:visible`}
       >
-        <ul className="flex flex-col p-3 lg:max-w-7xl lg:flex-row lg:items-center lg:gap-4 lg:p-0">
+        <ul className="flex flex-col p-3 lg:max-w-7xl lg:flex-row lg:items-center lg:p-0">
           {renderLinks}
         </ul>
       </div>
