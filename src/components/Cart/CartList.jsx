@@ -5,6 +5,9 @@ import Cart from "./Cart";
 import { GoX } from "react-icons/go";
 import EmptyCartIcon from "../../assets/add_to_cart.svg";
 import { toastStyles } from "../../constants/toastStyles";
+import Button from "../Button";
+import { loadStripe } from "@stripe/stripe-js";
+import { useMakeOrdersMutation } from "../../store/apis/ordersApi";
 
 function CartList({ onClose }) {
   const carts = useSelector((state) => state.carts.list);
@@ -24,6 +27,26 @@ function CartList({ onClose }) {
       icon: "😪",
       style: toastStyles,
     });
+  };
+
+  const stripePromise = loadStripe(
+    "pk_test_51Nw7pkSFuhcEPmVYHUItYLjBzKaORTDkWckhYaaMoZn4mwEI0INOwnnxmoj7caTsI62xHa4qEXKBfASiiJ2DQaaG005wkjn8Si"
+  );
+  const [makeOrder, { isLoading }] = useMakeOrdersMutation();
+
+  const handlePayment = async () => {
+    try {
+      if (carts.length > 0) {
+        const stripe = await stripePromise;
+        const res = await makeOrder({ products: carts }).unwrap();
+
+        await stripe.redirectToCheckout({
+          sessionId: res.stripeSession.id,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -62,9 +85,18 @@ function CartList({ onClose }) {
           </div>
         )}
       </article>
-      <article className="sticky bottom-0 flex items-center justify-between p-4 text-lg font-medium bg-background-secondary">
-        <span>Total</span>
-        <span className="text-blue-600">${total.toFixed(2)}</span>
+      <article className="sticky bottom-0 p-4 bg-background-secondary">
+        <div className="flex items-center justify-between mb-4 text-lg font-medium">
+          <span>Total</span>
+          <span className="text-blue-600">${total.toFixed(2)}</span>
+        </div>
+        <Button
+          className="py-1.5 text-sm rounded-lg justify-center border bg-slate-900 text-white border-slate-900 transition w-full hover:bg-slate-700 hover:border-slate-700"
+          onClick={handlePayment}
+          loadingWithChildren={isLoading}
+        >
+          Checkout
+        </Button>
       </article>
     </div>
   );
