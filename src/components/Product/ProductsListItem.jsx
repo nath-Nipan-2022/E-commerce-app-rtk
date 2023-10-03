@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addCart } from "../../store";
+
 import Button from "../Button";
 import Wishlist from "../Wishlist";
 import ProductImage from "./ProductImage";
 import ReviewsStars from "../Rating/ReviewsStars";
+
 import { toast } from "react-hot-toast";
 import { toastStyles } from "../../constants/toastStyles";
 
@@ -42,7 +44,9 @@ function ProductsListItem({ product }) {
         </article>
       </Link>
       <Button
-        className="hover:bg-slate-900 hover:border-slate-900 hover:text-white py-1.5 px-3 sm:px-4 text-xs lg:text-base rounded-lg border border-gray-300 active:scale-95 transition"
+        secondary
+        size={"small"}
+        className="rounded-lg active:scale-95"
         onClick={addToCart}
       >
         Add to Cart

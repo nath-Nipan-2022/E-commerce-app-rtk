@@ -8,7 +8,6 @@ import { addCart } from "../../store/slices/cartsSlice";
 // components
 import Button from "../Button";
 import Counter from "../Counter";
-import Panel from "../Panel";
 import ReviewsStars from "../Rating/ReviewsStars";
 import Wishlist from "../Wishlist";
 import ProductImage from "./ProductImage";
@@ -16,12 +15,18 @@ import Chip from "../Chip";
 
 function ProductDetails({ product }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const imageIndex = Number(searchParams.get("imageIndex")) || 0;
+  const imageIndex = Number(searchParams.get("imageIndex")) ?? 0;
+  const colorName = searchParams.get("color") ?? "";
   const [isAvailable, setIsAvailable] = useState(true);
 
   const onImageIndexChange = (i) => {
-    const params = { ...searchParams, imageIndex: i };
-    setSearchParams(params, { replace: true });
+    searchParams.set("imageIndex", i);
+    setSearchParams(searchParams, { replace: true });
+  };
+
+  const onColorChange = (color, i) => {
+    searchParams.set("color", color.color_name);
+    onImageIndexChange(i);
   };
 
   const [quantity, setQuantity] = useState(1);
@@ -72,23 +77,24 @@ function ProductDetails({ product }) {
 
   const renderColorBoxes = product.attributes?.color_variants?.data.map(
     (color, i) => {
-      let activeClass =
-        imageIndex === i
-          ? "outline-accent-blue"
-          : "hover:outline-accent-blue outline-transparent";
       const { color_name, color_code } = color;
+
+      let activeClass =
+        color.isAvailable && color_name === colorName
+          ? "outline-accent-blue"
+          : "hover:outline-accent-blue outline-neutral-300";
 
       return (
         <div key={i}>
           <Chip
-            className={`mx-auto outline cursor-pointer rounded-full w-10 h-10 ${activeClass}`}
+            className={`mx-auto outline cursor-pointer rounded-full w-8 h-8 ${activeClass}`}
             style={{ backgroundColor: `${color_code}` }}
             onClick={() => {
-              onImageIndexChange(i);
               setIsAvailable(color.isAvailable);
+              if (!color.isAvailable) return;
+              onColorChange(color, i);
             }}
           />
-          <span className="block mt-1">{color_name}</span>
         </div>
       );
     }
@@ -111,37 +117,42 @@ function ProductDetails({ product }) {
         <div className="flex justify-between gap-2 lg:flex-col lg:w-20">
           {renderImgBoxes}
         </div>
-        {!isAvailable && (
-          <duv className="absolute bottom-0 text-lg font-semibold text-red-500 left-1/2">
-            Out of Stock!
-          </duv>
-        )}
       </section>
       {/* Right Section */}
       <section className="pt-2 mt-5 border-t md:border-0 md:mt-0 md:pt-0">
-        <Panel className={"pb-4"}>
+        <div className={"pb-4"}>
           <h2 className="text-2xl font-medium">{name}</h2>
           <p className="py-2 text-gray-600">{desc}</p>
           <ReviewsStars ratings={ratings} reviews={reviews} />
-        </Panel>
+        </div>
 
-        <Panel className={"border-t py-2"}>
+        <div className={"border-t py-2"}>
           <h3 className="text-lg">${price}</h3>
           <p className="py-1 text-gray-600">
             Suggested payments with 6 months special financing.
           </p>
-        </Panel>
+        </div>
 
         {product.attributes?.colors.data?.length > 0 && (
-          <Panel className="py-2 border-t">
-            <h3 className="font-bold">Choose a color</h3>
+          <div className="py-2 border-t">
+            <h3 className="flex flex-wrap items-center gap-2">
+              <span className="font-bold">Color:</span>
+              <span className="font-semibold text-accent-blue">
+                {colorName}
+              </span>
+            </h3>
             <div className="flex gap-3 py-2">{renderColorBoxes}</div>
-          </Panel>
+            {!isAvailable && (
+              <div className="text-sm font-semibold text-red-500">
+                Out of Stock!
+              </div>
+            )}
+          </div>
         )}
 
-        <Panel className="pt-2 border-t">
+        <div className="pt-2 border-t">
           <h3 className="font-bold ">Quantity</h3>
-          <Panel className="flex items-center gap-4 mt-2">
+          <div className="flex items-center gap-4 mt-2">
             <Counter
               count={quantity}
               onIncrement={increment}
@@ -152,22 +163,24 @@ function ProductDetails({ product }) {
               Only <span className="font-medium text-orange-600">{212}</span>{" "}
               items left.
             </div>
-          </Panel>
-          <Panel className="flex flex-col gap-2 mt-6 md:items-stretch">
+          </div>
+          <div className="flex flex-col gap-3 mt-6 md:items-stretch">
             <Link
               to={"/"}
-              className="py-1.5 md:py-2 px-4 sm:px-6 text-sm sm:text-base rounded-lg text-center border bg-slate-900 text-white border-slate-900 transition hover:bg-slate-700 hover:border-slate-700"
+              className="px-3 py-2 text-xs text-center rounded-lg sm:py-2 sm:text-sm btn-primary"
             >
               Buy Now
             </Link>
             <Button
-              className="hover:bg-slate-900 hover:border-slate-900 hover:text-white py-1.5 px-2 md:px-4 md:py-2 text-sm sm:text-base rounded-lg transition border border-gray-300 justify-center active:scale-95"
+              secondary
+              size={"small"}
+              className="rounded-lg sm:py-2 sm:text-sm active:scale-95"
               onClick={addToCart}
             >
-              <span>Add to Cart</span>
+              Add to Cart
             </Button>
-          </Panel>
-        </Panel>
+          </div>
+        </div>
       </section>
     </div>
   );
