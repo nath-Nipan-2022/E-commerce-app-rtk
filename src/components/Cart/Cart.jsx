@@ -38,18 +38,18 @@ function Cart({ className, cartItem }) {
         <ProductImage url={images.data[0].attributes.url} alt={desc} />
       </figure>
       <article className="flex-1">
-        <h3 className="flex justify-between gap-1 mb-2">
-          <span className="overflow-hidden max-h-11">{name}</span>
+        <h3 className="flex justify-between gap-1 mb-2 text-sm">
+          <span className="overflow-hidden leading-tight max-h-11">{name}</span>
           <div
             onClick={handleRemove}
-            className="grid w-6 h-6 cursor-pointer place-items-center group"
+            className="grid w-6 h-4 cursor-pointer place-items-center group"
           >
             <GoX className="text-gray-500 group-hover:text-gray-900" />
           </div>
         </h3>
         <div className="flex items-center justify-between gap-2 mt-2">
           <Counter
-            className={"border h-7 font-semibold"}
+            className={"border border-neutral-300"}
             count={cartItem.quantity}
             onIncrement={increment}
             onDecrement={decrement}

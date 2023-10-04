@@ -18,7 +18,13 @@ function CartList({ onClose }) {
   }, 0);
 
   const renderCarts = carts.map((cart, i) => {
-    return <Cart key={i} className={"p-3 border-b"} cartItem={cart} />;
+    return (
+      <Cart
+        key={i}
+        className={"p-3 border-b border-neutral-300"}
+        cartItem={cart}
+      />
+    );
   });
 
   const removeAllCarts = () => {
@@ -51,7 +57,7 @@ function CartList({ onClose }) {
 
   return (
     <div
-      className={`fixed z-20 h-full w-full sm:w-80 bg-background-secondary shadow-2xl top-0 right-0 translate-x-full animate-slideIn overflow-y-auto`}
+      className={`fixed z-20 h-full w-full sm:w-80 bg-background-secondary shadow-2xl top-0 right-0 translate-x-full animate-slideIn overflow-y-auto border-l border-neutral-300`}
     >
       <article className="px-5 py-4 pb-0 sm:px-3">
         <div
@@ -60,7 +66,7 @@ function CartList({ onClose }) {
         >
           <GoX className="text-gray-600" />
         </div>
-        <h2 className="flex justify-between pb-2 mt-4 font-medium border-b">
+        <h2 className="flex justify-between pb-2 mt-4 font-medium border-b border-neutral-300">
           <span>Order Summery</span>
           <span
             onClick={removeAllCarts}
@@ -91,7 +97,9 @@ function CartList({ onClose }) {
           <span className="text-blue-600">${total.toFixed(2)}</span>
         </div>
         <Button
-          className="py-1.5 text-sm rounded-lg justify-center border bg-slate-900 text-white border-slate-900 transition w-full hover:bg-slate-700 hover:border-slate-700"
+          primary
+          size={"small"}
+          className="w-full rounded-lg"
           onClick={handlePayment}
           loadingWithChildren={isLoading}
         >
