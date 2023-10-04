@@ -86,7 +86,7 @@ function FilterPanel({
   return (
     <section className={className}>
       <Panel
-        title={"Categories"}
+        title={`${subCats?.data.length > 0 ? "Categories" : "Filter"} `}
         className="p-4 border border-b-0 lg:rounded-t-lg"
       >
         {subCats?.data ? (

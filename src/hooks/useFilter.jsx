@@ -98,7 +98,7 @@ const useFilter = (products) => {
 
   // filter by color
   if (color) {
-    filteredProducts = filteredProducts.filter((product) => {
+    filteredProducts = filteredProducts?.filter((product) => {
       return product.attributes.colors.data.some((clr) => {
         return clr.attributes.name === color;
       });
