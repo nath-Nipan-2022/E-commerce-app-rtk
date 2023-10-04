@@ -86,16 +86,17 @@ function CategoriesPage() {
           )}
         </div>
         <article className="w-full mx-auto">
-          <h2 className="flex items-center justify-between gap-2 mt-4 lg:justify-center">
-            <span className="text-h2">Trending {type} For You</span>
+          <h2 className="flex justify-between gap-2 mt-4 leading-tight text-h2">
+            <span className="capitalize">Trending {type}</span>
             {/* FilterPanel Toggler */}
             <Button
-              rounded
-              className="gap-1 pl-2 pr-3 text-white bg-accent-slate-blue h-7 hover:opacity-80 lg:hidden"
+              secondary
+              size={"small"}
+              className="flex items-center gap-1 pl-2 pr-3 rounded-md h-7 lg:hidden"
               onClick={() => setShowFilterPanel(true)}
             >
               <GoFilter />
-              <span className="text-sm">Filter</span>
+              <span>Filter</span>
             </Button>
           </h2>
           {/* render the filtered data here */}

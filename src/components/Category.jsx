@@ -18,7 +18,7 @@ function CategorySection({ className }) {
       <Link
         to={`/categories/${item.attributes.name}`}
         key={item.id}
-        className="relative h-56 overflow-hidden group rounded-xl"
+        className="relative h-40 overflow-hidden sm:h-56 group rounded-xl"
       >
         <ProductImage
           url={images[randomImgIndex].attributes.url}

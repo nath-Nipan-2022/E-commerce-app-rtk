@@ -9,7 +9,7 @@ function ProductView() {
   );
 
   return (
-    <div className="mx-auto">
+    <>
       {isLoading || isFetching ? (
         <ProductViewSkeleton />
       ) : (
@@ -21,7 +21,7 @@ function ProductView() {
           Error loading product!
         </div>
       )}
-    </div>
+    </>
   );
 }
 export default ProductView;

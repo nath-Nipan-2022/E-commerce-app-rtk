@@ -69,7 +69,7 @@ function ProductDetails({ product }) {
         <ProductImage
           url={image.attributes.url}
           alt={desc}
-          className="select-none rounded-xl aspect-square"
+          className="rounded-lg select-none aspect-square"
         />
       </figure>
     );
@@ -85,9 +85,9 @@ function ProductDetails({ product }) {
           : "hover:outline-accent-blue outline-neutral-300";
 
       return (
-        <div key={i}>
+        <div key={i} title={color_name}>
           <Chip
-            className={`mx-auto outline cursor-pointer rounded-full w-8 h-8 ${activeClass}`}
+            className={`outline outline-offset-2 cursor-pointer rounded-full w-7 h-7 ${activeClass}`}
             style={{ backgroundColor: `${color_code}` }}
             onClick={() => {
               setIsAvailable(color.isAvailable);
@@ -127,7 +127,7 @@ function ProductDetails({ product }) {
         </div>
 
         <div className={"border-t py-2"}>
-          <h3 className="text-lg">${price}</h3>
+          <h3 className="text-lg font-bold">${price}</h3>
           <p className="py-1 text-gray-600">
             Suggested payments with 6 months special financing.
           </p>
@@ -159,10 +159,6 @@ function ProductDetails({ product }) {
               onDecrement={decrement}
               className={"rounded-md bg-rose-100 h-8"}
             />
-            <div className="text-sm text-gray-600">
-              Only <span className="font-medium text-orange-600">{212}</span>{" "}
-              items left.
-            </div>
           </div>
           <div className="flex flex-col gap-3 mt-6 md:items-stretch">
             <Link

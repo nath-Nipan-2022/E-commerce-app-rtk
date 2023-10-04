@@ -24,7 +24,7 @@ function Home() {
       </section>
 
       <section className="py-4 max-container lg:py-10">
-        <h2 className="text-h2">Trending Products For You</h2>
+        <h2 className="text-h2">Trending Products</h2>
         <ProductsList type="trending" />
       </section>
 
