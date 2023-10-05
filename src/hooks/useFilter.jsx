@@ -2,28 +2,29 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 const useFilter = (products) => {
-  const [priceRange, setPriceRange] = useState(null);
-
   const [searchParams, setSearchParams] = useSearchParams();
 
   const subCats = searchParams.get("sub-cats")?.split(",") ?? [];
   const priceOrder = searchParams.get("price-order");
   const ratingsAbove = searchParams.get("ratings-above");
+  const priceRange = Number(searchParams.get("price-range"));
   const color = searchParams.get("color");
 
-  // change the sub-categories state 🔥
-  const handleSubCatsChange = (subCat) => {
-    if (subCats.includes(subCat)) {
-      subCats.splice(subCats.indexOf(subCat), 1);
+  const handleFiltersChange = (key, value) => {
+    if (!value || color === value) {
+      searchParams.delete(key);
+    } else if (key === "sub-cats") {
+      subCats.includes(value)
+        ? subCats.splice(subCats.indexOf(value), 1)
+        : subCats.push(value);
+
+      subCats.length === 0
+        ? searchParams.delete(key)
+        : searchParams.set(key, subCats.join(","));
     } else {
-      subCats.push(subCat);
+      searchParams.set(key, value);
     }
-    if (!subCats.length) {
-      searchParams.delete("sub-cats");
-      setSearchParams(searchParams, { replace: true });
-      return;
-    }
-    searchParams.set("sub-cats", subCats.join(","));
+
     setSearchParams(searchParams, { replace: true });
   };
 
@@ -54,11 +55,6 @@ const useFilter = (products) => {
   }
 
   // filter by price order
-  const setPriceOrder = (order) => {
-    searchParams.set("price-order", order);
-    setSearchParams(searchParams, { replace: true });
-  };
-
   if (priceOrder) {
     let order = priceOrder === "asc" ? 1 : -1;
 
@@ -69,32 +65,12 @@ const useFilter = (products) => {
     });
   }
 
-  const setRatings = (ratings) => {
-    if (!ratings) {
-      searchParams.delete("ratings-above");
-      setSearchParams(searchParams, { replace: true });
-      return;
-    }
-    searchParams.set("ratings-above", ratings);
-    setSearchParams(searchParams, { replace: true });
-  };
-
   // filer by ratings
   if (ratingsAbove) {
     filteredProducts = filteredProducts?.filter((product) => {
       return product.attributes.ratings >= ratingsAbove;
     });
   }
-
-  const onColorChange = (newColor) => {
-    if (color === newColor) {
-      searchParams.delete("color");
-      setSearchParams(searchParams, { replace: true });
-      return;
-    }
-    searchParams.set("color", newColor);
-    setSearchParams(searchParams, { replace: true });
-  };
 
   // filter by color
   if (color) {
@@ -106,12 +82,15 @@ const useFilter = (products) => {
   }
 
   return {
-    handleSubCatsChange,
     filteredProducts,
-    setPriceOrder,
-    setPriceRange,
-    setRatings,
-    onColorChange,
+    handleFiltersChange,
+    filterValues: {
+      subCats,
+      priceOrder,
+      ratingsAbove,
+      priceRange,
+      color,
+    },
   };
 };
 

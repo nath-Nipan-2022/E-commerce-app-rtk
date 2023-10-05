@@ -1,42 +1,23 @@
-import { useEffect, useState } from "react";
 import Skeleton from "./Skeleton";
 import RatingStarsInputs from "./Rating/RatingStarsInputs";
-import { useSearchParams } from "react-router-dom";
 import Chip from "./Chip";
 import Panel from "./Panel";
+import useFilter from "../hooks/useFilter";
 
-function FilterPanel({
-  products,
-  subCats,
-  onSubCatsChange,
-  setPriceRange,
-  setPriceOrder,
-  setRatings,
-  colors,
-  onColorChange,
-  className,
-}) {
+export default function FilterPanel({ products, subCats, colors, className }) {
+  const {
+    handleFiltersChange,
+    filterValues: {
+      subCats: selectedSubCats,
+      color: selectedColor,
+      ratingsAbove: selectedRatings,
+      priceOrder: selectedPriceOrder,
+      priceRange: selectedPriceRange,
+    },
+  } = useFilter();
+
   let maxAmount = getMaxPrice(products);
-  const [maxPrice, setMaxPrice] = useState(maxAmount);
-
-  const [searchParams] = useSearchParams();
-
-  useEffect(() => {
-    setMaxPrice(getMaxPrice(products));
-  }, [products]);
-
-  const handlePriceChange = (e) => {
-    setMaxPrice(e.target.value);
-    setPriceRange(e.target.value); // directly pass the value to the parent
-  };
-
-  const handlePriceOrderChange = (order) => {
-    setPriceOrder(order);
-  };
-
-  const selectedSubCats = searchParams.get("sub-cats")?.split(",") ?? [];
-  const selectedPriceOrder = searchParams.get("price-order");
-  const selectedColor = searchParams.get("color");
+  let maxPrice = selectedPriceRange ?? maxAmount;
 
   const renderSubCatsInputs = subCats?.data.map((sub_cat) => {
     const { name } = sub_cat.attributes;
@@ -44,10 +25,10 @@ function FilterPanel({
       <div key={name} className={`flex gap-2 items-center my-2`}>
         <input
           type="checkbox"
-          onChange={() => onSubCatsChange(name)}
+          onChange={() => handleFiltersChange("sub-cats", name)}
           id={name}
           name={name}
-          checked={selectedSubCats.some((value) => value === name)}
+          checked={selectedSubCats?.some((value) => value === name)}
         />
         <label
           htmlFor={name}
@@ -75,7 +56,7 @@ function FilterPanel({
       >
         <Chip
           text={name}
-          onClick={() => onColorChange(name)}
+          onClick={() => handleFiltersChange("color", name)}
           className={`w-14 h-6 rounded-md capitalize border-2 ${activeClass}`}
           style={{ backgroundColor: `${code}` }}
         />
@@ -119,11 +100,14 @@ function FilterPanel({
           type="range"
           min={0}
           max={maxAmount}
-          onChange={handlePriceChange}
+          onChange={(e) => handleFiltersChange("price-range", e.target.value)}
           className="w-full h-2.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-slate-700"
         />
       </Panel>
-      <RatingStarsInputs onChange={setRatings} />
+      <RatingStarsInputs
+        value={selectedRatings}
+        onChange={(v) => handleFiltersChange("ratings-above", v)}
+      />
       {colors?.data?.length > 0 && (
         <Panel title={"Colors"} className="p-4 border border-b-0">
           <ul className={`flex gap-2 flex-wrap`}>{renderColors}</ul>
@@ -135,7 +119,7 @@ function FilterPanel({
             type="radio"
             name="sort-price"
             id="lowest-first"
-            onChange={() => handlePriceOrderChange("asc")}
+            onChange={() => handleFiltersChange("price-order", "asc")}
             checked={selectedPriceOrder === "asc"}
           />
           <label
@@ -150,7 +134,7 @@ function FilterPanel({
             type="radio"
             name="sort-price"
             id="highest-first"
-            onChange={() => handlePriceOrderChange("desc")}
+            onChange={() => handleFiltersChange("price-order", "desc")}
             checked={selectedPriceOrder === "desc"}
           />
           <label
@@ -171,5 +155,3 @@ function getMaxPrice(products) {
   }, 0);
   return max || 0;
 }
-
-export default FilterPanel;
