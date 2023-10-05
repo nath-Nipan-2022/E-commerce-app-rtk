@@ -1,16 +1,15 @@
-import { useState } from "react";
+import { useCallback, useRef } from "react";
 import { GoStarFill } from "react-icons/go";
-import { useSearchParams } from "react-router-dom";
 
-function RatingStars({ onChange }) {
-  const [isChecked, setIsChecked] = useState(false);
-  const [searchParams] = useSearchParams();
-  const selectedRatings = searchParams.get("ratings-above") ?? 3;
+function RatingStars({ value, onChange }) {
+  const ref = useRef();
 
-  const handleRatingsChange = (i) => {
-    isChecked ? onChange(i + 1) : onChange(0);
-    console.log(isChecked, selectedRatings, i);
-  };
+  const handleRatingsChange = useCallback(
+    (i) => {
+      ref.current.checked ? onChange(i + 1) : onChange(null);
+    },
+    [onChange]
+  );
 
   const renderReviews = Array(5)
     .fill(0)
@@ -19,7 +18,7 @@ function RatingStars({ onChange }) {
         key={i}
         onClick={() => handleRatingsChange(i)}
         className={`transition-colors ${
-          i <= selectedRatings - 1 ? "text-yellow-500" : "text-gray-300"
+          i <= value - 1 ? "text-yellow-500" : "text-gray-300"
         }`}
       />
     ));
@@ -32,7 +31,8 @@ function RatingStars({ onChange }) {
           type="checkbox"
           id="checkbox-rating"
           name="checkbox-rating"
-          onChange={(e) => setIsChecked(e.target.checked)}
+          ref={ref}
+          onChange={() => handleRatingsChange()}
         />
         {renderReviews}
         <label
