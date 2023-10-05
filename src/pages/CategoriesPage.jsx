@@ -36,19 +36,12 @@ function CategoriesPage() {
   // get the colors associated with the category
   const { data: colors } = useGetColorsQuery("?" + category);
 
-  const {
-    filteredProducts,
-    handleSubCatsChange,
-    setPriceOrder,
-    setPriceRange,
-    setRatings,
-    onColorChange,
-  } = useFilter(products);
+  const { filteredProducts } = useFilter(products);
 
-  // use the filtered values
-  let renderCategoryProducts = filteredProducts?.map((product) => {
-    return <ProductsListItem key={product.id} product={product} />;
-  });
+  // use the filteredProducts
+  let renderCategoryProducts = filteredProducts?.map((product) => (
+    <ProductsListItem key={product.id} product={product} />
+  ));
 
   const [showFilterPanel, setShowFilterPanel] = useState(false);
 
@@ -64,11 +57,6 @@ function CategoriesPage() {
         <FilterPanel
           products={products}
           subCats={subCats}
-          onSubCatsChange={handleSubCatsChange}
-          setPriceRange={setPriceRange}
-          setPriceOrder={setPriceOrder}
-          setRatings={setRatings}
-          onColorChange={onColorChange}
           colors={colors}
           className={`lg:sticky lg:top-[72px] w-52`}
         />
