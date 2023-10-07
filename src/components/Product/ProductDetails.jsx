@@ -31,14 +31,17 @@ function ProductDetails({ product }) {
 
   const [quantity, setQuantity] = useState(1);
   const [tempQty, setTempQty] = useState(0);
-  const { name, desc, price, reviews, ratings, images } = product.attributes;
+  const { name, desc, price, reviews, ratings, images, color_variants } =
+    product.attributes;
 
   const dispatch = useDispatch();
   const addToCart = () => {
     dispatch(
       addCart({
         ...product,
-        quantity: quantity,
+        quantity,
+        color: colorName || color_variants.data[0].color_name,
+        image: images.data[imageIndex],
       })
     );
     // for toasting

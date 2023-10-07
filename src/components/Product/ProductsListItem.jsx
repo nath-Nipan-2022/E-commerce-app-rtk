@@ -11,7 +11,8 @@ import { toast } from "react-hot-toast";
 import { toastStyles } from "../../constants/toastStyles";
 
 function ProductsListItem({ product }) {
-  const { name, price, reviews, ratings, images } = product.attributes;
+  const { name, price, reviews, ratings, images, color_variants } =
+    product.attributes;
 
   const dispatch = useDispatch();
 
@@ -19,6 +20,8 @@ function ProductsListItem({ product }) {
     dispatch(
       addCart({
         ...product,
+        color: color_variants.data[0].color_name,
+        image: images.data[0],
       })
     );
     toast(`Item Added To Your Cart!`, {

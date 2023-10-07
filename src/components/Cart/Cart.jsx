@@ -11,8 +11,8 @@ import { ProductImage } from "../Product";
 import { toast } from "react-hot-toast";
 import { toastStyles } from "../../constants/toastStyles";
 
-function Cart({ className, cartItem }) {
-  const { name, price, images, desc } = cartItem.attributes;
+function Cart({ cartItem }) {
+  const { name, price, desc } = cartItem.attributes;
 
   const dispatch = useDispatch();
 
@@ -33,20 +33,28 @@ function Cart({ className, cartItem }) {
   };
 
   return (
-    <div className={`flex items-center gap-4 ${className}`}>
-      <figure className="overflow-hidden rounded-md w-14 h-14 shrink-0">
-        <ProductImage url={images.data[0].attributes.url} alt={desc} />
+    <div className={`flex gap-4 p-3 pl-0 border-b border-neutral-300`}>
+      <figure className="w-20 overflow-hidden rounded-md shrink-0">
+        <ProductImage url={cartItem.image.attributes.url} alt={desc} />
       </figure>
       <article className="flex-1">
-        <h3 className="flex justify-between gap-1 mb-2 text-sm">
-          <span className="overflow-hidden leading-tight max-h-11">{name}</span>
-          <div
+        <div className="flex justify-between gap-1 mb-2 ">
+          <h3 className="overflow-hidden text-sm leading-tight max-h-11">
+            {name}
+          </h3>
+          <span
             onClick={handleRemove}
             className="grid w-6 h-4 cursor-pointer place-items-center group"
           >
             <GoX className="text-gray-500 group-hover:text-gray-900" />
-          </div>
+          </span>
+        </div>
+
+        <h3 className="text-xs">
+          <span className="text-sm text-gray-00">Color:</span>
+          {cartItem.color}
         </h3>
+
         <div className="flex items-center justify-between gap-2 mt-2">
           <Counter
             className={"border border-neutral-300"}
