@@ -47,14 +47,11 @@ function SearchResults() {
   );
 
   const handleKeyBoardNavigation = (e) => {
-    let index = 0;
+    let index = searchState.selectedIndex;
     if (e.key === "ArrowDown") {
-      index = Math.min(
-        searchState.selectedIndex + 1,
-        filteredProducts.length - 1
-      );
+      index = Math.min(index + 1, filteredProducts.length - 1);
     } else if (e.key === "ArrowUp") {
-      index = Math.max(searchState.selectedIndex - 1, 0);
+      index = Math.max(index - 1, 0);
     }
     setSearchState({ ...searchState, selectedIndex: index });
   };
@@ -62,7 +59,7 @@ function SearchResults() {
   const navigate = useNavigate();
   const handleSubmit = () => {
     navigate(`/products/${filteredProducts[searchState.selectedIndex].id}`);
-    setSearchState(initState);
+    setSearchState({ ...searchState, selectedIndex: 0, value: "" });
   };
 
   const renderSearchResults = filteredProducts?.map((product, index) => {
