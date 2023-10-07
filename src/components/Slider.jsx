@@ -20,28 +20,26 @@ function Slider({ images, className }) {
   const renderSlides = images.map((slide) => (
     <div
       key={slide.id}
-      className={`p-4 lg:p-6 flex justify-evenly gap-3 items-center ${className}`}
+      className={`p-4 lg:p-6 flex justify-evenly gap-3 items-center bg-white/50 ${className}`}
       style={{ width: 100 / images.length + "%" }}
     >
       <div>
-        <h3 className="font-bold text-[4vw] md:text-3xl lg:text-4xl text-slate-700 mb-3 md:mb-6">
+        <h3 className="font-bold text-[4vw] leading-tight md:text-3xl lg:text-4xl text-slate-700 mb-3 md:mb-6">
           Grab Upto
-          <span className="px-1 mx-1 text-white rounded drop-shadow-xl">
-            50%
-          </span>
+          <span className="px-1 mx-1 text-rose-600 text-[1.125em]">50%</span>
           Off <span className="block">On Selected Products</span>
         </h3>
         <Link
           to={"/"}
-          className="inline-block px-4 py-2 text-xs font-medium text-white transition rounded-full bg-slate-800 sm:text-base sm:px-6 hover:bg-slate-700"
+          className="inline-block px-3 py-1.5 text-xs rounded-lg md:text-sm sm:px-5 sm:py-2 btn-primary"
         >
           Buy Now
         </Link>
       </div>
 
-      <div className="w-1/3 overflow-hidden shadow-lg rounded-2xl sm:w-1/4 bg-gray-200/80">
+      <div className="w-1/3 overflow-hidden rounded-lg sm:w-1/4">
         <ProductImage
-          className="aspect-auto"
+          className="aspect-square"
           url={slide.attributes.url}
           alt={"slider image"}
         />
