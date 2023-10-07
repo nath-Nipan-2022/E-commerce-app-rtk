@@ -15,6 +15,9 @@ const ordersApi = createApi({
     },
   }),
   endpoints: (builder) => ({
+    getOrders: builder.query({
+      query: (url) => `/orders/${url || ""}`,
+    }),
     makeOrders: builder.mutation({
       query: (orders) => ({
         url: "/orders",
@@ -26,4 +29,4 @@ const ordersApi = createApi({
 });
 
 export { ordersApi };
-export const { useMakeOrdersMutation } = ordersApi;
+export const { useGetOrdersQuery, useMakeOrdersMutation } = ordersApi;

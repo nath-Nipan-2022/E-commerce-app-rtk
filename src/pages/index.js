@@ -3,5 +3,6 @@ import CategoriesPage from "./CategoriesPage";
 import ErrorPage from "./ErrorPage";
 import Home from "./Home";
 import ProductView from "./ProductView";
+import OrdersPage from "./OrdersPage";
 
-export { CategoriesPage, ErrorPage, Home, ProductView, Account };
+export { CategoriesPage, ErrorPage, Home, ProductView, Account, OrdersPage };

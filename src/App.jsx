@@ -1,5 +1,5 @@
 import { RouterProvider, Outlet, createBrowserRouter } from "react-router-dom";
-import { Home, Account, ErrorPage, ProductView, CategoriesPage } from "./pages";
+import { Home, Account, ErrorPage, ProductView, CategoriesPage,OrdersPage } from "./pages";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { Toaster } from "react-hot-toast";
@@ -7,7 +7,7 @@ import { ScrollToTop } from "./helper";
 
 const Layout = () => {
   return (
-    <div className="font-Nunito bg-background-primary text-foreground">
+    <div className="font-plus-jakarta-sans bg-background-primary text-foreground">
       <Header />
       <main className="px-6 mx-auto max-w-7xl">
         <ScrollToTop />
@@ -39,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "products/:id",
         element: <ProductView />,
+      },
+      {
+        path: "orders",
+        element: <OrdersPage />,
       },
     ],
   },
