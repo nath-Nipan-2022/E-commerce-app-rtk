@@ -51,6 +51,24 @@
         "trending",
         "normal"
       ]
+    },
+    "ratings": {
+      "type": "decimal"
+    },
+    "reviews": {
+      "type": "integer"
+    },
+    "sizes": {
+      "type": "json"
+    },
+    "color_variants": {
+      "type": "json"
+    },
+    "colors": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::color.color",
+      "mappedBy": "products"
     }
   }
 }

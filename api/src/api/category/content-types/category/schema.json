@@ -29,6 +29,12 @@
       "relation": "manyToMany",
       "target": "api::sub-category.sub-category",
       "mappedBy": "categories"
+    },
+    "colors": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::color.color",
+      "mappedBy": "categories"
     }
   }
 }
