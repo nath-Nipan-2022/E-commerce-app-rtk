@@ -12,6 +12,7 @@ export default {
       },
       fontFamily: {
         Nunito: "Nunito, sans-serif",
+        "plus-jakarta-sans": "Plus Jakarta Sans, sans-serif",
       },
       keyframes: {
         shimmer: {
