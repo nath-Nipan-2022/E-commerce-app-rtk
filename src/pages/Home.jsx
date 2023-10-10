@@ -14,9 +14,9 @@ function Home() {
 
   return (
     <div>
-      <section className="overflow-hidden rounded-lg max-container bg-[#ff9d85]">
+      <section className="overflow-hidden rounded-lg bg-[#dce2e9]">
         {isLoading ? (
-          <Skeleton className={"w-full h-36 sm:h-44 lg:h-72 border"} />
+          <Skeleton className={"w-full h-44 sm:h-56 lg:h-72 border"} />
         ) : (
           <Slider images={data.data[randomIndex].attributes.images.data} />
         )}

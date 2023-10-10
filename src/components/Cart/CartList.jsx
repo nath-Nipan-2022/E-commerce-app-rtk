@@ -18,13 +18,7 @@ function CartList({ onClose }) {
   }, 0);
 
   const renderCarts = carts.map((cart, i) => {
-    return (
-      <Cart
-        key={i}
-        className={"p-3 border-b border-neutral-300"}
-        cartItem={cart}
-      />
-    );
+    return <Cart key={i} cartItem={cart} />;
   });
 
   const removeAllCarts = () => {
@@ -87,7 +81,9 @@ function CartList({ onClose }) {
                 className="w-full h-full"
               />
             </figure>
-            <h6 className="py-2 text-sm text-center">Add items to your cart</h6>
+            <h6 className="py-2 font-semibold text-center">
+              Add items to your cart
+            </h6>
           </div>
         )}
       </article>
