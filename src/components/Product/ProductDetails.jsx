@@ -19,14 +19,10 @@ function ProductDetails({ product }) {
   const colorName = searchParams.get("color") ?? "";
   const [isAvailable, setIsAvailable] = useState(true);
 
-  const onImageIndexChange = (i) => {
+  const onFilter = (i, color) => {
     searchParams.set("imageIndex", i);
+    searchParams.set("color", color_variants.data[i].color_name);
     setSearchParams(searchParams, { replace: true });
-  };
-
-  const onColorChange = (color, i) => {
-    searchParams.set("color", color.color_name);
-    onImageIndexChange(i);
   };
 
   const [quantity, setQuantity] = useState(1);
@@ -39,6 +35,7 @@ function ProductDetails({ product }) {
     dispatch(
       addCart({
         ...product,
+        name,
         quantity,
         color: colorName || color_variants.data[0].color_name,
         image: images.data[imageIndex],
@@ -66,7 +63,7 @@ function ProductDetails({ product }) {
     return (
       <figure
         key={i}
-        onMouseEnter={() => onImageIndexChange(i)}
+        onMouseEnter={() => onFilter(i)}
         className={`w-1/4 rounded-xl cursor-pointer group lg:w-full lg:h-1/4 ${activeClass}`}
       >
         <ProductImage
@@ -95,7 +92,7 @@ function ProductDetails({ product }) {
             onClick={() => {
               setIsAvailable(color.isAvailable);
               if (!color.isAvailable) return;
-              onColorChange(color, i);
+              onFilter(i, color_name);
             }}
           />
         </div>
