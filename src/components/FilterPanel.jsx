@@ -45,7 +45,7 @@ export default function FilterPanel({ products, subCats, colors, className }) {
     const activeClass =
       name === selectedColor
         ? "border-accent-blue"
-        : "group-hover:border-accent-blue";
+        : "border-transparent group-hover:border-accent-blue";
 
     return (
       <li
@@ -53,11 +53,11 @@ export default function FilterPanel({ products, subCats, colors, className }) {
         className={`group ${
           code === "#000000" ? "text-neutral-100" : "text-slate-900"
         }`}
+        title={name}
       >
         <Chip
-          text={name}
           onClick={() => handleFiltersChange("color", name)}
-          className={`w-14 h-6 rounded-md capitalize border-2 ${activeClass}`}
+          className={`w-6 h-6 rounded-full border-2 ${activeClass}`}
           style={{ backgroundColor: `${code}` }}
         />
       </li>

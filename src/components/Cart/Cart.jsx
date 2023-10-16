@@ -46,12 +46,12 @@ function Cart({ cartItem }) {
             onClick={handleRemove}
             className="grid w-6 h-4 cursor-pointer place-items-center group"
           >
-            <GoX className="text-gray-500 group-hover:text-gray-900" />
+            <GoX className="text-gray-600 group-hover:text-gray-900" />
           </span>
         </div>
 
-        <h3 className="text-xs">
-          <span className="text-sm text-gray-00">Color:</span>
+        <h3 className="text-sm">
+          <span className="mr-1 text-gray-500">Color:</span>
           {cartItem.color}
         </h3>
 

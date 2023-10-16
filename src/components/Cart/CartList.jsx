@@ -71,8 +71,8 @@ function CartList({ onClose }) {
         </h2>
         <div>{renderCarts}</div>
         {carts.length === 0 && (
-          <div className="h-[250px]">
-            <figure>
+          <div>
+            <figure className="h-[300px] md:h-[250px] ">
               <img
                 src={EmptyCartIcon}
                 alt="empty cart"
@@ -81,9 +81,9 @@ function CartList({ onClose }) {
                 className="w-full h-full"
               />
             </figure>
-            <h6 className="py-2 font-semibold text-center">
+            <h3 className="py-2 font-semibold text-center">
               Add items to your cart
-            </h6>
+            </h3>
           </div>
         )}
       </article>
