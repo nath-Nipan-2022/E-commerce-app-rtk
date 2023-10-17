@@ -17,18 +17,26 @@ function ProductDetails({ product }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const imageIndex = Number(searchParams.get("imageIndex")) ?? 0;
   const colorName = searchParams.get("color") ?? "";
-  const [isAvailable, setIsAvailable] = useState(true);
-
-  const onFilter = (i, color) => {
-    searchParams.set("imageIndex", i);
-    searchParams.set("color", color_variants.data[i].color_name);
-    setSearchParams(searchParams, { replace: true });
-  };
+  const selectedSize = searchParams.get("size") ?? "";
 
   const [quantity, setQuantity] = useState(1);
   const [tempQty, setTempQty] = useState(0);
+  const [isAvailable, setIsAvailable] = useState(true);
   const { name, desc, price, reviews, ratings, images, color_variants } =
     product.attributes;
+
+  const onFilter = (i, color) => {
+    searchParams.set("imageIndex", i);
+
+    let hasColor = color_variants.data[i];
+    if (hasColor) {
+      searchParams.set("color", hasColor.color_name);
+      setIsAvailable(hasColor.isAvailable);
+    } else if (color) {
+      searchParams.set("color", color);
+    }
+    setSearchParams(searchParams, { replace: true });
+  };
 
   const dispatch = useDispatch();
   const addToCart = () => {
@@ -39,6 +47,7 @@ function ProductDetails({ product }) {
         quantity,
         color: colorName || color_variants.data[0].color_name,
         image: images.data[imageIndex],
+        size: selectedSize,
       })
     );
     // for toasting
@@ -75,30 +84,42 @@ function ProductDetails({ product }) {
     );
   });
 
-  const renderColorBoxes = product.attributes?.color_variants?.data.map(
-    (color, i) => {
-      const { color_name, color_code } = color;
+  const renderColorBoxes = color_variants?.data.map((color, i) => {
+    const { color_name, color_code } = color;
 
-      let activeClass =
-        color.isAvailable && color_name === colorName
-          ? "outline-accent-blue"
-          : "hover:outline-accent-blue outline-neutral-300";
+    const activeClass =
+      color_name === colorName
+        ? "outline-accent-blue"
+        : "hover:outline-accent-blue outline-neutral-300";
 
-      return (
-        <div key={i} title={color_name}>
-          <Chip
-            className={`outline outline-offset-2 cursor-pointer rounded-full w-7 h-7 ${activeClass}`}
-            style={{ backgroundColor: `${color_code}` }}
-            onClick={() => {
-              setIsAvailable(color.isAvailable);
-              if (!color.isAvailable) return;
-              onFilter(i, color_name);
-            }}
-          />
-        </div>
-      );
-    }
-  );
+    return (
+      <div key={i} title={color_name}>
+        <Chip
+          className={`outline outline-offset-2 cursor-pointer rounded-full w-5 h-5 ${activeClass}`}
+          style={{ backgroundColor: `${color_code}` }}
+          onClick={() => onFilter(i, color_name)}
+        />
+      </div>
+    );
+  });
+
+  const renderSizes = product.attributes?.sizes?.data.map((item) => (
+    <Chip
+      key={item.id}
+      text={item.size}
+      className={`py-1 text-xs px-2.5 whitespace-nowrap rounded + ${
+        item.size === selectedSize ? "border border-accent-blue" : "border"
+      }`}
+      onClick={() => {
+        if (!item.enabled) return;
+        searchParams.set("size", item.size);
+        setSearchParams(searchParams, { replace: true });
+      }}
+      style={{ opacity: item.enabled ? 1 : 0.65 }}
+    >
+      {item.size}
+    </Chip>
+  ));
 
   return (
     <div className="flex flex-col gap-5 lg:gap-12 md:flex-row">
@@ -119,64 +140,75 @@ function ProductDetails({ product }) {
         </div>
       </section>
       {/* Right Section */}
-      <section className="pt-2 mt-5 border-t md:border-0 md:mt-0 md:pt-0">
-        <div className={"pb-4"}>
+      <section className="[&>*:not(:first-child)]:py-2 mt-7 md:border-0 md:mt-0">
+        <article className="pb-4">
           <h2 className="text-2xl font-medium">{name}</h2>
-          <p className="py-2 text-gray-600">{desc}</p>
+          <p className="pt-1 pb-2 text-sm text-gray-600">{desc}</p>
           <ReviewsStars ratings={ratings} reviews={reviews} />
-        </div>
+        </article>
 
-        <div className={"border-t py-2"}>
+        <article>
           <h3 className="text-lg font-bold">${price}</h3>
-          <p className="py-1 text-gray-600">
+          <p className="py-1 text-sm text-gray-600">
             Suggested payments with 6 months special financing.
           </p>
-        </div>
+        </article>
 
-        {product.attributes?.colors.data?.length > 0 && (
-          <div className="py-2 border-t">
+        {color_variants?.data?.length > 0 && (
+          <article>
             <h3 className="flex flex-wrap items-center gap-2">
-              <span className="font-bold">Color:</span>
-              <span className="font-semibold text-accent-blue">
+              <span className="font-bold">Color : </span>
+              <span className="mt-1 text-sm font-semibold text-accent-blue">
                 {colorName}
               </span>
             </h3>
-            <div className="flex gap-3 py-2">{renderColorBoxes}</div>
+            <div className="flex items-center gap-4 pl-1 mt-3 mb-2">
+              {renderColorBoxes}
+            </div>
             {!isAvailable && (
               <div className="text-sm font-semibold text-red-500">
                 Out of Stock!
               </div>
             )}
-          </div>
+          </article>
         )}
 
-        <div className="pt-2 border-t">
-          <h3 className="font-bold ">Quantity</h3>
-          <div className="flex items-center gap-4 mt-2">
+        {product.attributes?.sizes && (
+          <article>
+            <h3 className="font-bold">Size</h3>
+            <div className="flex flex-wrap max-w-md gap-2 mt-2 text-gray-500">
+              {renderSizes}
+            </div>
+          </article>
+        )}
+
+        <article>
+          <div className="flex gap-4 mt-2">
+            <h3 className="font-bold">Quantity : </h3>
             <Counter
               count={quantity}
               onIncrement={increment}
               onDecrement={decrement}
-              className={"rounded-md bg-rose-100 h-8"}
+              className={"rounded border h-8"}
             />
           </div>
-          <div className="flex flex-col gap-3 mt-6 md:items-stretch">
+          <div className="flex gap-3 mt-5">
             <Link
               to={"/"}
-              className="px-3 py-2 text-xs text-center rounded-lg sm:py-2 sm:text-sm btn-primary"
+              className="flex-1 py-3 text-xs text-center rounded-lg btn-primary"
             >
               Buy Now
             </Link>
             <Button
               secondary
               size={"small"}
-              className="rounded-lg sm:py-2 sm:text-sm active:scale-95"
+              className="flex-1 py-3 text-sm rounded-lg active:scale-95"
               onClick={addToCart}
             >
               Add to Cart
             </Button>
           </div>
-        </div>
+        </article>
       </section>
     </div>
   );
