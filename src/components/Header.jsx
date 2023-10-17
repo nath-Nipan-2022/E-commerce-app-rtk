@@ -22,11 +22,17 @@ function Header() {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-10 bg-background-primary">
+    <header className="sticky top-0 z-10 mb-6 border-b bg-background-primary">
       <div className="flex items-center justify-between p-2 px-5 mx-auto max-w-7xl">
         <Link to={"/"} className="flex items-center ">
-          <img src={logo} alt="company logo" width={44} title="Company logo" />
-          <span className="text-lg lg:text-xl">ShopCart</span>
+          <img
+            src={logo}
+            alt="company logo"
+            width={32}
+            className="invert"
+            title="Company logo"
+          />
+          <span className="text-lg">ShopCart</span>
         </Link>
 
         <Navbar openMenu={openMenu} onClose={toggleMenu} />
@@ -38,14 +44,14 @@ function Header() {
             onClick={() => navigate("/account")}
             className="hover:text-slate-900"
           >
-            <FiUser />
+            <FiUser className="text-base" />
           </Button>
           <Button
             className="relative hover:text-slate-900"
             onClick={() => setOpenCartList(true)}
             title="cart list"
           >
-            <FiShoppingCart />
+            <FiShoppingCart className="text-base" />
             <Chip
               text={cartQuantity}
               className="absolute top-0 right-0 w-4 h-4 text-xs text-white rounded-full bg-accent-blue"
@@ -55,7 +61,7 @@ function Header() {
             onClick={toggleMenu}
             className="block p-2 lg:hidden hover:text-slate-900"
           >
-            {!openMenu ? <FiMenu /> : <FiX />}
+            {!openMenu ? <FiMenu className="text-base" /> : <FiX />}
             <span className="sr-only">menu icon</span>
           </Button>
         </div>

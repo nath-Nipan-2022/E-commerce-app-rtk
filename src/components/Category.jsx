@@ -18,16 +18,16 @@ function CategorySection({ className }) {
       <Link
         to={`/categories/${item.attributes.name}`}
         key={item.id}
-        className="relative h-40 overflow-hidden sm:h-56 group rounded-xl"
+        className="group"
       >
-        <ProductImage
-          url={images[randomImgIndex].attributes.url}
-          alt={item.desc}
-          className={
-            "aspect-auto h-full w-full group-hover:scale-105 transition-transform duration-200"
-          }
-        />
-        <div className="absolute inset-0 flex items-end justify-center p-4 pb-6 text-center text-white bg-gradient-to-t from-black/40 to-[#00000020] font-semibold lg:text-lg">
+        <figure className="w-56 mx-auto mb-5 overflow-hidden border shadow-lg border-neutral-100 rounded-xl aspect-square">
+          <ProductImage
+            url={images[randomImgIndex].attributes.url}
+            alt={item.desc}
+            className="w-full h-full transition-transform duration-200 group-hover:scale-105"
+          />
+        </figure>
+        <div className="font-semibold text-center">
           {item.attributes.name.toUpperCase()}
         </div>
       </Link>
@@ -36,7 +36,7 @@ function CategorySection({ className }) {
 
   return (
     <div
-      className={`grid grid-cols-2 sm:grid-cols-3 gap-6 lg:grid-cols-4 lg:justify-around ${className}`}
+      className={`grid grid-cols-2 sm:grid-cols-3 gap-8 lg:grid-cols-4 lg:justify-around ${className}`}
     >
       {renderCards}
     </div>

@@ -23,7 +23,6 @@ const CartsSlice = createSlice({
         state.list.push({
           quantity: 1,
           ...action.payload,
-          id: Math.random() + 1 * 999,
         });
       }
     },

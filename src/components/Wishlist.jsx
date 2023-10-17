@@ -22,20 +22,18 @@ function Wishlist({ productCard }) {
 
   return (
     <div
-      className="p-1.5 absolute right-2 top-1.5 w-8 h-8 cursor-pointer drop-shadow"
+      className="p-1.5 absolute right-1 top-1 w-8 h-8 cursor-pointer"
       onClick={() => setIsWishlist((prev) => !prev)}
     >
       <BsHeartFill
-        className={`absolute w-6 h-6 left-1/2 -translate-x-1/2 transition ${
+        className={`absolute w-5 h-5 left-1/2 -translate-x-1/2 transition text-[#db505b] ${
           isWishlist ? "opacity-100 scale-100" : "opacity-0 scale-150"
         }`}
-        style={{ color: "#db505b" }}
       />
       <BsHeartFill
-        className={`absolute w-6 h-6 left-1/2 -translate-x-1/2 transition ${
+        className={`absolute w-5 h-5 left-1/2 -translate-x-1/2 transition text-[#00000059] ${
           !isWishlist ? "opacity-100 scale-100" : "opacity-0 scale-150"
         }`}
-        style={{ color: "#fff" }}
       />
     </div>
   );

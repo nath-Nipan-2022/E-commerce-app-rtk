@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 
 function SearchForm({ value, onChange, onSubmit, className, ...rest }) {
@@ -17,7 +16,7 @@ function SearchForm({ value, onChange, onSubmit, className, ...rest }) {
         type="search"
         value={value}
         id="product-search"
-        placeholder="Search Products"
+        placeholder="Search"
         className="search-input"
         onChange={onInputChange}
         {...rest}

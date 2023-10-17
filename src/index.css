@@ -4,7 +4,7 @@
 
 :root {
   --background-primary: #fff;
-  --background-secondary: #f1f1f6;
+  --background-secondary: hsl(240, 100%, 98.5%);
   --foreground: #111;
   --accent-slate-blue: #151e28;
   --accent-blue: #5c6bc0;
@@ -33,6 +33,9 @@
     @apply absolute top-0 right-0 grid w-10 h-full text-gray-500 select-none place-items-center;
   }
   .btn-primary {
-    @apply font-medium text-white border border-accent-slate-blue bg-accent-slate-blue hover:bg-slate-700 hover:border-slate-700;
+    @apply font-medium text-white border shadow-2xl border-accent-slate-blue bg-accent-slate-blue hover:bg-slate-700 hover:border-slate-700;
+  }
+  .chevron {
+    @apply absolute z-10 flex items-center justify-center w-12 h-12 text-2xl text-white transition -translate-y-1/2 bg-white rounded-full shadow-lg cursor-pointer hover:bg-accent-slate-blue hover:text-white top-1/2 text-accent-slate-blue;
   }
 }

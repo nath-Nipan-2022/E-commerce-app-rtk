@@ -99,7 +99,9 @@ function SearchResults() {
         {/* desktop search */}
         <SearchForm
           value={searchState.value}
-          onChange={(value) => setSearchState({ ...searchState, value })}
+          onChange={(value) =>
+            setSearchState({ ...searchState, value, isOpen: true })
+          }
           onSubmit={handleSubmit}
           onKeyDown={handleKeyBoardNavigation}
           autoComplete="off"
