@@ -18,16 +18,16 @@ function CategorySection({ className }) {
       <Link
         to={`/categories/${item.attributes.name}`}
         key={item.id}
-        className="group"
+        className="p-3 border rounded-lg md:p-4 group hover:shadow-lg"
       >
-        <figure className="w-56 mx-auto mb-5 overflow-hidden border shadow-lg border-neutral-100 rounded-xl aspect-square">
+        <figure className="mx-auto overflow-hidden rounded-md lg:w-56 aspect-square">
           <ProductImage
             url={images[randomImgIndex].attributes.url}
             alt={item.desc}
             className="w-full h-full transition-transform duration-200 group-hover:scale-105"
           />
         </figure>
-        <div className="font-semibold text-center">
+        <div className="pt-3 pb-1 text-xs font-semibold text-center md:text-sm text-accent-slate-blue">
           {item.attributes.name.toUpperCase()}
         </div>
       </Link>

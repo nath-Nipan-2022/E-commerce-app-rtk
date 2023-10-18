@@ -7,34 +7,9 @@ function OrdersPage() {
   const { data: orders, isLoading } = useGetOrdersQuery();
 
   return (
-    <section className="py-4">
-      <h2 className="pb-4 text-xl font-bold border-b">Order details</h2>
-      {isLoading ? (
-        <div className="sm:flex sm:gap-4">
-          <div>
-            <Skeleton className="w-32 rounded-md shrink-0" />
-
-            <div className="flex-1 pt-1">
-              <Skeleton className="h-2" />
-              <Skeleton className="h-2 mt-1" />
-              <Skeleton className="h-2 mt-2" />
-              <Skeleton className="w-20 mt-4 rounded-md h-11" />
-            </div>
-
-            <div className="w-36">
-              <Skeleton className="w-10 h-2 mt-2" />
-              <Skeleton className="w-32 h-2 mt-2" />
-
-              <br />
-              <Skeleton className="w-10 h-2 mt-2" />
-              <Skeleton className="h-2 mt-2" />
-            </div>
-          </div>
-        </div>
-      ) : (
-        <OrdersList orders={orders.data} />
-      )}
-
+    <section className="max-w-3xl py-4 mx-auto">
+      <h1 className="pb-4 text-xl font-bold sm:text-center">Order details</h1>
+      {isLoading ? renderSkeletons() : <OrdersList orders={orders.data} />}
       {orders?.data?.length === 0 && (
         <div className="h-[250px]">
           <img
@@ -54,4 +29,33 @@ function OrdersPage() {
   );
 }
 
+function renderSkeletons() {
+  return Array(5)
+    .fill(0)
+    .map((_, i) => {
+      return (
+        <article className="mt-2 mb-6" key={i}>
+          <div className="flex items-center justify-between gap-6 py-4">
+            <Skeleton className="w-32 h-2 rounded-md sm:w-40" />
+            <Skeleton className="w-32 h-2 rounded-md sm:w-40" />
+          </div>
+          <div className="flex gap-4 py-4 border-y">
+            <Skeleton className="w-32 h-32 rounded-md shrink-0" />
+            <div className="flex flex-col flex-1 gap-2 sm:gap-6 sm:flex-row">
+              <Skeleton className="w-32 h-2 rounded-md sm:w-40" />
+              <div className="mt-2 sm:mt-0">
+                <Skeleton className="w-10 h-2 rounded-md" />
+                <Skeleton className="w-6 h-2 mt-2 rounded-md" />
+              </div>
+              <div className="mt-2 sm:mt-0">
+                <Skeleton className="w-10 h-2 rounded-md" />
+                <Skeleton className="w-6 h-2 mt-2 rounded-md" />
+              </div>
+              <Skeleton className="w-20 h-6 mt-2 rounded-md sm:mt-0 sm:w-40" />
+            </div>
+          </div>
+        </article>
+      );
+    });
+}
 export default OrdersPage;
