@@ -1,15 +1,19 @@
-import { toast } from "react-hot-toast";
+import { memo } from "react";
+import { loadStripe } from "@stripe/stripe-js";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-hot-toast";
+
 import { resetCart } from "../../store/slices/cartsSlice";
-import Cart from "./Cart";
+import { useMakeOrdersMutation } from "../../store/apis/ordersApi";
+
 import { GoX } from "react-icons/go";
+import { BsChevronCompactRight } from "react-icons/bs";
 import EmptyCartIcon from "../../assets/add_to_cart.svg";
 import { toastStyles } from "../../constants/toastStyles";
 import Button from "../Button";
-import { loadStripe } from "@stripe/stripe-js";
-import { useMakeOrdersMutation } from "../../store/apis/ordersApi";
+import Cart from "./Cart";
 
-function CartList({ onClose }) {
+const CartList = memo(function CartList({ isOpen, setIsOpen }) {
   const carts = useSelector((state) => state.carts.list);
   const dispatch = useDispatch();
 
@@ -51,11 +55,15 @@ function CartList({ onClose }) {
 
   return (
     <div
-      className={`fixed z-20 h-full w-full sm:w-80 bg-background-secondary shadow-2xl top-0 right-0 translate-x-full animate-slideIn overflow-y-auto border-l border-neutral-300`}
+      className={`fixed z-20 h-full w-full sm:w-80 bg-background-secondary top-0 right-0 border-l transition duration-300 ${
+        isOpen
+          ? "translate-x-0 shadow-2xl border-neutral-300"
+          : "translate-x-full"
+      }`}
     >
       <article className="px-5 py-4 pb-0 sm:px-3">
         <div
-          onClick={onClose}
+          onClick={() => setIsOpen(false)}
           className="grid w-8 h-8 border rounded-full cursor-pointer hover:bg-gray-200 place-items-center"
         >
           <GoX className="text-gray-600" />
@@ -102,8 +110,20 @@ function CartList({ onClose }) {
           Checkout
         </Button>
       </article>
+
+      <div
+        className={`absolute top-0 items-center hidden w-8 h-full transition -left-9 sm:flex ${
+          !isOpen ? "opacity-0 invisible" : "opacity-100 visible"
+        }`}
+      >
+        <div
+          onClick={() => setIsOpen(!isOpen)}
+          className={`grid h-12 rounded-full cursor-pointer w-14 place-items-center group bg-background-secondary`}
+        >
+          <BsChevronCompactRight className="text-3xl transition duration-300 text-gray-500 group-hover:text-blue-600 group-hover:translate-x-[2px] opacity-100" />
+        </div>
+      </div>
     </div>
   );
-}
-
+});
 export default CartList;

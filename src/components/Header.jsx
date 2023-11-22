@@ -65,7 +65,7 @@ function Header() {
             <span className="sr-only">menu icon</span>
           </Button>
         </div>
-        {openCartList && <CartList onClose={() => setOpenCartList(false)} />}
+        {<CartList isOpen={openCartList} setIsOpen={setOpenCartList} />}
       </div>
     </header>
   );
