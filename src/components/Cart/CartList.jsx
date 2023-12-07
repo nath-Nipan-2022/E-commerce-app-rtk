@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import { resetCart } from "../../store/slices/cartsSlice";
 import { useMakeOrdersMutation } from "../../store/apis/ordersApi";
 
-import { GoX } from "react-icons/go";
+import { GoX, GoAlert } from "react-icons/go";
 import { BsChevronCompactRight } from "react-icons/bs";
 import EmptyCartIcon from "../../assets/add_to_cart.svg";
 import { toastStyles } from "../../constants/toastStyles";
@@ -27,8 +27,8 @@ const CartList = memo(function CartList({ isOpen, setIsOpen }) {
 
   const removeAllCarts = () => {
     dispatch(resetCart());
-    toast(`Your Cart Is Empty Now!`, {
-      icon: "😪",
+    toast(`Your cart is empty now!`, {
+      icon: <GoAlert />,
       style: toastStyles,
     });
   };

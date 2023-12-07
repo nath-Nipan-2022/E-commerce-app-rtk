@@ -7,6 +7,7 @@ import Wishlist from "../Wishlist";
 import ProductImage from "./ProductImage";
 import ReviewsStars from "../Rating/ReviewsStars";
 
+import { GoCheckCircleFill } from "react-icons/go";
 import { toast } from "react-hot-toast";
 import { toastStyles } from "../../constants/toastStyles";
 
@@ -24,15 +25,15 @@ function ProductsListItem({ product }) {
         image: images.data[0],
       })
     );
-    toast(`Item Added To Your Cart!`, {
-      icon: "🔥",
+    toast(`Item added to your cart!`, {
+      icon: <GoCheckCircleFill />,
       style: toastStyles,
     });
   };
 
   return (
     <div className="relative rounded-md cursor-pointer group">
-      <Link to={`/products/${product.id}`}>
+      <Link to={`/products/${product.id}`} className="inline-block w-full pb-8">
         <figure className="overflow-hidden rounded-md aspect-square">
           <ProductImage
             url={images.data[0].attributes.url}
@@ -49,7 +50,7 @@ function ProductsListItem({ product }) {
       <Button
         secondary
         size={"small"}
-        className="rounded-lg active:scale-95"
+        className="absolute bottom-0 left-0 rounded-lg active:scale-95"
         onClick={addToCart}
       >
         Add to Cart

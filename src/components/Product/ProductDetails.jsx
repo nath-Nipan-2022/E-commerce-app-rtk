@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
 import { toastStyles } from "../../constants/toastStyles";
 import { addCart } from "../../store/slices/cartsSlice";
+import { GoCheckCircleFill } from "react-icons/go";
 
 // components
 import Button from "../Button";
@@ -51,9 +52,9 @@ function ProductDetails({ product }) {
       })
     );
     // for toasting
-    if (quantity && quantity !== tempQty) {
-      toast(`Item Added To Your Carts!`, {
-        icon: "🔥",
+    if (quantity > tempQty) {
+      toast(`Item added to your carts!`, {
+        icon: <GoCheckCircleFill />,
         style: toastStyles,
       });
       setTempQty(quantity);
@@ -64,7 +65,7 @@ function ProductDetails({ product }) {
     setQuantity((prev) => prev + 1);
   };
   const decrement = () => {
-    quantity > 1 && setQuantity((prev) => prev - 1);
+    setQuantity(Math.max(1, quantity - 1));
   };
 
   const renderImgBoxes = images.data.map((image, i) => {

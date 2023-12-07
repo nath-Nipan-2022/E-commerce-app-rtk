@@ -1,4 +1,4 @@
-import { GoX } from "react-icons/go";
+import { GoX, GoAlertFill } from "react-icons/go";
 import { useDispatch } from "react-redux";
 import {
   incrementQuantity,
@@ -26,8 +26,8 @@ function Cart({ cartItem }) {
 
   const handleRemove = () => {
     dispatch(removeCart(cartItem));
-    toast(`Item removed from Cart!`, {
-      icon: "❗",
+    toast(`Item removed from cart!`, {
+      icon: <GoAlertFill />,
       style: toastStyles,
     });
   };
