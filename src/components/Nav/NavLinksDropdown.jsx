@@ -1,36 +1,31 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useGetCategoriesQuery } from "../../store/apis/categoriesApi";
 import { ProductImage } from "../Product";
+import Dropdown from "../Dropdown";
 
-function NavLinksDropdown({
-  isOpen,
-  hasTitle,
-  onItemClick,
-  className,
-  ...rest
-}) {
-  const { data: categories } = useGetCategoriesQuery(
+function NavLinksDropdown({ isOpen, onItemClick, className }) {
+  const { data: items } = useGetCategoriesQuery(
     "?populate=*populate[0]=products&populate[1]=products.images"
   );
 
   const navigate = useNavigate();
-  const handleCategoryClick = (e, name) => {
+  const handleItemsClick = (e, name) => {
     e.preventDefault();
     navigate(`/categories/${name.toLowerCase()}`);
     onItemClick();
   };
 
-  const renderCats = categories?.data.map((item, i) => {
+  const renderItems = items?.data.map((item, i) => {
     if (i > 5) return;
 
     const { name } = item.attributes;
     const images = item.attributes.products.data[0].attributes.images.data;
 
     return (
-      <li key={item.id} className="rounded-md hover:bg-slate-700/10">
+      <li key={item.id} className="rounded-md hover:bg-blue-50">
         <Link
           to={`/categories/${name.toLowerCase()}`}
-          onClick={(e) => handleCategoryClick(e, name)}
+          onClick={(e) => handleItemsClick(e, name)}
           className={`block p-2 lg:flex items-center gap-2`}
         >
           <div className="hidden overflow-hidden rounded-lg shrink-0 w-14 h-14 lg:block">
@@ -53,22 +48,11 @@ function NavLinksDropdown({
   });
 
   return (
-    <div
-      {...rest}
-      className={`absolute z-20 top-full left-0 ${
-        isOpen ? "block" : "hidden"
-      } ${className || ""}`}
-    >
-      <div className="bg-white lg:border lg:shadow-lg lg:rounded-lg animate-popUp">
-        {hasTitle && (
-          <h4 className="p-2 text-gray-600 border-b lg:p-4">{hasTitle}</h4>
-        )}
-
-        <ul className="grid w-full grid-cols-2 gap-2 p-2 rounded-b-md lg:p-4 lg:grid-cols-dropdown">
-          {renderCats}
-        </ul>
-      </div>
-    </div>
+    <Dropdown isOpen={isOpen} hasTitle={"Top Categories"} className={className}>
+      <ul className="grid w-full grid-cols-2 gap-2 p-2 rounded-b-md lg:p-4 lg:grid-cols-dropdown">
+        {renderItems}
+      </ul>
+    </Dropdown>
   );
 }
 
