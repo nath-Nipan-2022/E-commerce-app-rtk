@@ -18,7 +18,7 @@
     @apply py-2.5 mb-4 text-xl font-bold sm:text-4xl lg:mb-8;
   }
   .filter-panel-wrapper {
-    @apply fixed top-0 left-0 z-20 h-screen overflow-y-scroll transition duration-300 bg-white shadow-xl lg:overflow-visible lg:z-0 lg:static lg:h-auto lg:shadow-none;
+    @apply fixed top-0 left-0 z-20 h-screen overflow-y-scroll transition duration-300 bg-white shadow-xl lg:overflow-visible lg:relative lg:z-0 lg:h-auto lg:shadow-none;
   }
   .nav-dropdown-wrapper {
     @apply fixed top-0 z-20 w-[calc(100%-32px)] -translate-x-1/2 bg-white rounded-lg left-1/2 lg:translate-x-0 lg:w-auto lg:static lg:bg-transparent;

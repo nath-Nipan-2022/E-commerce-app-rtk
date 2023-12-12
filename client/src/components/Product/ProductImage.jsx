@@ -1,7 +1,7 @@
 function ProductImage({ url, alt, className, ...rest }) {
   return (
     <img
-      src={import.meta.env.VITE_REACT_APP_UPLOAD_URL + url}
+      src={url}
       alt={alt}
       width={300}
       height={300}

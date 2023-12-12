@@ -42,11 +42,6 @@ export default function FilterPanel({ products, subCats, colors, className }) {
 
   const renderColors = colors?.data?.map((color) => {
     const { name, code } = color.attributes;
-    const activeClass =
-      name === selectedColor
-        ? "border-accent-blue"
-        : "border-transparent group-hover:border-accent-blue";
-
     return (
       <li
         key={color.id}
@@ -57,7 +52,11 @@ export default function FilterPanel({ products, subCats, colors, className }) {
       >
         <Chip
           onClick={() => handleFiltersChange("color", name)}
-          className={`w-6 h-6 rounded-full border-2 ${activeClass}`}
+          className={`w-6 h-6 rounded-full ${
+            name === selectedColor
+              ? "ring ring-slate-600/50"
+              : "ring-1 ring-slate-500/50"
+          }`}
           style={{ backgroundColor: `${code}` }}
         />
       </li>

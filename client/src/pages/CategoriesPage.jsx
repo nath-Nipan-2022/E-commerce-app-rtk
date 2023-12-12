@@ -116,7 +116,7 @@ function CategoriesPage() {
         {/* modal background */}
         {showFilterPanel && (
           <div
-            className="fixed inset-0 z-10 opacity-0 bg-black/70 animate-fadeIn dark:bg-slate-800/50"
+            className="fixed inset-0 z-10 opacity-0 bg-black/70 animate-fadeIn dark:bg-slate-800/50 lg:hidden"
             onClick={() => setShowFilterPanel(false)}
           ></div>
         )}

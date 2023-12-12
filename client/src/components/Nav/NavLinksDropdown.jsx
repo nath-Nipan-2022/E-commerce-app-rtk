@@ -11,7 +11,7 @@ function NavLinksDropdown({ isOpen, onItemClick, className }) {
   const navigate = useNavigate();
   const handleItemsClick = (e, name) => {
     e.preventDefault();
-    navigate(`/categories/${name.toLowerCase()}`);
+    navigate(`/categories/${name}`);
     onItemClick();
   };
 
