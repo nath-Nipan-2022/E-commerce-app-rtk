@@ -61,39 +61,41 @@ function ProductView() {
       )}
 
       {error && (
-        <div className="p-4 text-lg text-red-700 rounded-md bg-red-50">
-          Error loading product!
+        <div className="p-4 mt-4 text-lg text-red-700 rounded-md bg-red-50">
+          Error loading similar products!
         </div>
       )}
 
       {/* similar products */}
-      <section className="my-20 border-t">
-        <h2 className="my-10 text-center text-h2">Similar Products</h2>
-        <div className="relative m-4 group/container">
-          <div
-            className="opacity-0 chevron -left-7 group-hover/container:opacity-100"
-            onClick={() => handleCarouselScroll("left")}
-          >
-            <GoChevronLeft />
-          </div>
-          <div ref={ref} className="md:overflow-x-hidden">
-            <div className="flex justify-center gap-5">
-              {isFetchingSimilarPdt ? (
-                <ProductsListItemSkeleton times={4} />
-              ) : (
-                renderCategoryProducts
-              )}
-              {similarPdtError && "Error loading category products"}
+      {similarProducts?.length > 0 && (
+        <section className="my-20 border-t">
+          <h2 className="my-10 text-center text-h2">You may also like</h2>
+          <div className="relative m-4 group/container">
+            <div
+              className="opacity-0 chevron -left-7 group-hover/container:opacity-100"
+              onClick={() => handleCarouselScroll("left")}
+            >
+              <GoChevronLeft />
+            </div>
+            <div ref={ref} className="md:overflow-x-hidden">
+              <div className="flex justify-center gap-5">
+                {isFetchingSimilarPdt ? (
+                  <ProductsListItemSkeleton times={4} />
+                ) : (
+                  renderCategoryProducts
+                )}
+                {similarPdtError && "Error loading category products"}
+              </div>
+            </div>
+            <div
+              className="opacity-0 chevron -right-7 group-hover/container:opacity-100"
+              onClick={() => handleCarouselScroll("right")}
+            >
+              <GoChevronRight />
             </div>
           </div>
-          <div
-            className="opacity-0 chevron -right-7 group-hover/container:opacity-100"
-            onClick={() => handleCarouselScroll("right")}
-          >
-            <GoChevronRight />
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

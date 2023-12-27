@@ -11,10 +11,17 @@ function ProductsList({ type }) {
     return <ProductsListItem key={product.id} product={product} />;
   });
 
+  if (error) {
+    return (
+      <div className="text-xl font-medium text-center text-red-700 bg-red-100 rounded-md p-14">
+        Error Loading Products
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4 xl:gap-x-8">
       {isLoading ? <ProductsListItemSkeleton times={8} /> : renderProducts}
-      {error && "Error loading products"}
     </div>
   );
 }

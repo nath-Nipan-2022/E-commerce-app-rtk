@@ -17,10 +17,13 @@ function Home() {
       <section className="overflow-hidden rounded-lg bg-[#dce2e9]">
         {isLoading ? (
           <Skeleton className={"w-full h-44 sm:h-56 lg:h-72 border"} />
-        ) : (
+        ) : !error ? (
           <Slider images={data.data[randomIndex].attributes.images.data} />
+        ) : (
+          <div className="text-xl font-medium text-center text-red-700 bg-red-100 rounded-md p-14">
+            Something went wrong. Try to refresh!
+          </div>
         )}
-        {error && "Error Loading Slider"}
       </section>
 
       <section className="pt-8 lg:pt-12 max-container">

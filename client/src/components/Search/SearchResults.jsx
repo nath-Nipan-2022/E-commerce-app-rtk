@@ -70,8 +70,8 @@ function SearchResults() {
         <Link
           to={`/products/${product.id}`}
           onClick={() => setSearchState(initState)}
-          className={`py-1.5 px-5 font-medium block border-l-2 hover:bg-black/5 ${
-            isActive ? "border-blue-500 bg-black/5" : "border-transparent"
+          className={`py-1.5 text-sm text-slate-600 px-5 block border-l-2 hover:bg-neutral-100 ${
+            isActive ? "border-blue-500 bg-neutral-100" : "border-transparent"
           }`}
         >
           {product.attributes.name}
@@ -87,7 +87,7 @@ function SearchResults() {
   });
 
   const hasProducts =
-    searchState.value && searchState.isOpen && filteredProducts.length > 0;
+    searchState.value && searchState.isOpen && filteredProducts?.length > 0;
 
   return (
     <div className="relative min-h-[44px] ml-auto md:ml-0">
@@ -113,7 +113,7 @@ function SearchResults() {
         {searchState.isOpen && (
           <div className="flex justify-center md:hidden" ref={ref}>
             <SearchForm
-              id="product-search_mobile"
+              id="product-search"
               autoFocus={true}
               autoComplete="off"
               value={searchState.value}
@@ -127,7 +127,7 @@ function SearchResults() {
         {/* Results box */}
         {hasProducts && (
           <div className="search-results-box">
-            <ul className="flex flex-col divide-y animate-slideIn divide-neutral-100">
+            <ul className="flex flex-col py-2 bg-white border divide-y shadow-2xl border-neutral-100 rounded-xl animate-slideIn divide-neutral-100">
               {renderSearchResults}
             </ul>
           </div>
@@ -136,7 +136,7 @@ function SearchResults() {
 
       {/* search icon */}
       <span
-        className={`search-icon-wrapper z-10 md:hidden ${
+        className={`search-icon-wrapper z-0 md:hidden ${
           searchState.isOpen
             ? "hidden"
             : "text-gray-600 hover:text-slate-900 cursor-pointer"

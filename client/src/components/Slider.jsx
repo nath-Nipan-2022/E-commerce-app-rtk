@@ -24,14 +24,16 @@ function Slider({ images, className }) {
       style={{ width: 100 / images.length + "%" }}
     >
       <div>
-        <h3 className="font-bold text-[4vw] leading-tight md:text-3xl lg:text-4xl text-slate-700 mb-3 md:mb-6">
+        <h3 className="font-medium text-[4vw] md:text-3xl lg:text-4xl text-slate-700 mb-3 md:mb-6">
           Grab Upto
-          <span className="px-1 mx-1 text-rose-600 text-[1.125em]">50%</span>
+          <span className="px-2 font-bold text-red-800 drop-shadow text-[1.125em]">
+            50%
+          </span>
           Off <span className="block">On Selected Products</span>
         </h3>
         <Link
           to={"/"}
-          className="inline-block px-3 py-1.5 text-xs rounded-lg md:text-sm sm:px-5 sm:py-2 btn-primary"
+          className="inline-block px-4 py-2 text-xs rounded-md lg:rounded-lg lg:text-sm lg:px-6 lg:py-2.5 btn-primary"
         >
           Buy Now
         </Link>

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useGetCategoriesQuery } from "../../store/apis/categoriesApi";
 import { ProductImage } from "../Product";
 import Dropdown from "../Dropdown";
@@ -8,24 +8,17 @@ function NavLinksDropdown({ isOpen, onItemClick, className }) {
     "?populate=*populate[0]=products&populate[1]=products.images"
   );
 
-  const navigate = useNavigate();
-  const handleItemsClick = (e, name) => {
-    e.preventDefault();
-    navigate(`/categories/${name}`);
-    onItemClick();
-  };
-
   const renderItems = items?.data.map((item, i) => {
     if (i > 5) return;
 
-    const { name } = item.attributes;
-    const images = item.attributes.products.data[0].attributes.images.data;
+    const { name, products } = item.attributes;
+    const images = products.data[0].attributes.images.data;
 
     return (
       <li key={item.id} className="rounded-md hover:bg-blue-50">
         <Link
-          to={`/categories/${name.toLowerCase()}`}
-          onClick={(e) => handleItemsClick(e, name)}
+          to={`/categories/${name}`}
+          onClick={() => onItemClick()}
           className={`block p-2 lg:flex items-center gap-2`}
         >
           <div className="hidden overflow-hidden rounded-lg shrink-0 w-14 h-14 lg:block">
@@ -37,9 +30,9 @@ function NavLinksDropdown({ isOpen, onItemClick, className }) {
           </div>
 
           <div className="sm:gap-2 sm:flex sm:items-center lg:items-start sm:pr-8 lg:flex-col lg:w-44 lg:gap-0">
-            <h6>{name}</h6>
-            <p className="text-xs leading-none lg:text-sm text-slate-600 whitespace-nowrap">
-              {Math.floor(Math.random() * 200) + 10} Items Available
+            <h6 className="font-medium text-gray-600">{name}</h6>
+            <p className="text-xs text-gray-500 lg:text-sm whitespace-nowrap">
+              {Math.floor(Math.random() * 20) + 10} items available
             </p>
           </div>
         </Link>

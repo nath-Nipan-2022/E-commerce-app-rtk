@@ -1,18 +1,17 @@
 import { useState } from "react";
-import { toast } from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 import { Link, useSearchParams } from "react-router-dom";
-import { toastStyles } from "../../constants/toastStyles";
-import { addCart } from "../../store/slices/cartsSlice";
-import { GoCheckCircleFill } from "react-icons/go";
 
 // components
 import Button from "../Button";
+import Chip from "../Chip";
 import Counter from "../Counter";
 import ReviewsStars from "../Rating/ReviewsStars";
 import Wishlist from "../Wishlist";
 import ProductImage from "./ProductImage";
-import Chip from "../Chip";
+
+//hooks
+import { useCartList } from "../../hooks/useCartList";
 
 function ProductDetails({ product }) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,6 +22,7 @@ function ProductDetails({ product }) {
   const [quantity, setQuantity] = useState(1);
   const [tempQty, setTempQty] = useState(0);
   const [isAvailable, setIsAvailable] = useState(true);
+
   const { name, desc, price, reviews, ratings, images, color_variants } =
     product.attributes;
 
@@ -39,24 +39,20 @@ function ProductDetails({ product }) {
     setSearchParams(searchParams, { replace: true });
   };
 
-  const dispatch = useDispatch();
-  const addToCart = () => {
-    dispatch(
-      addCart({
-        ...product,
-        name,
-        quantity,
-        color: colorName || color_variants.data[0].color_name,
-        image: images.data[imageIndex],
-        size: selectedSize,
-      })
-    );
-    // for toasting
+  const { dispatch, addCart } = useCartList();
+
+  const handleAddingCart = () => {
     if (quantity > tempQty) {
-      toast(`Item added to your carts!`, {
-        icon: <GoCheckCircleFill />,
-        style: toastStyles,
-      });
+      dispatch(
+        addCart({
+          ...product,
+          quantity,
+          color: colorName || color_variants.data[0].color_name,
+          image: images.data[imageIndex],
+          size: selectedSize,
+        })
+      );
+      toast.success("Item added successfully!");
       setTempQty(quantity);
     }
   };
@@ -94,7 +90,7 @@ function ProductDetails({ product }) {
         : "hover:outline-accent-blue outline-neutral-300";
 
     return (
-      <div key={i} title={color_name}>
+      <div key={color.color_code} title={color_name}>
         <Chip
           className={`outline outline-offset-2 cursor-pointer rounded-full w-5 h-5 ${activeClass}`}
           style={{ backgroundColor: `${color_code}` }}
@@ -108,8 +104,10 @@ function ProductDetails({ product }) {
     <Chip
       key={item.id}
       text={item.size}
-      className={`py-1 text-xs px-2.5 whitespace-nowrap rounded + ${
-        item.size === selectedSize ? "border border-accent-blue" : "border"
+      className={`py-2 text-xs px-4 border whitespace-nowrap rounded-lg ${
+        item.size === selectedSize
+          ? "border-accent-slate-blue bg-accent-slate-blue text-white"
+          : "hover:border-accent-slate-blue hover:bg-accent-slate-blue hover:text-white"
       }`}
       onClick={() => {
         if (!item.enabled) return;
@@ -144,30 +142,28 @@ function ProductDetails({ product }) {
       <section className="[&>*:not(:first-child)]:py-2 mt-7 md:border-0 md:mt-0">
         <article className="pb-4">
           <h2 className="text-2xl font-medium">{name}</h2>
-          <p className="pt-1 pb-2 text-sm text-gray-600">{desc}</p>
+          <p className="py-2 text-sm text-gray-600">{desc}</p>
           <ReviewsStars ratings={ratings} reviews={reviews} />
         </article>
 
         <article>
-          <h3 className="text-lg font-bold">${price}</h3>
-          <p className="py-1 text-sm text-gray-600">
+          <h3 className="text-lg font-medium">${price}</h3>
+          <p className="py-2 text-sm text-gray-600">
             Suggested payments with 6 months special financing.
           </p>
         </article>
 
         {color_variants?.data?.length > 0 && (
           <article>
-            <h3 className="flex flex-wrap items-center gap-2">
-              <span className="font-bold">Color : </span>
-              <span className="mt-1 text-sm font-semibold text-accent-blue">
-                {colorName}
-              </span>
+            <h3 className="flex flex-wrap items-center gap-2 font-medium">
+              <span>Color : </span>
+              <span className="text-accent-blue">{colorName}</span>
             </h3>
             <div className="flex items-center gap-4 pl-1 mt-3 mb-2">
               {renderColorBoxes}
             </div>
             {!isAvailable && (
-              <div className="text-sm font-semibold text-red-500">
+              <div className="text-sm font-medium text-red-500">
                 Out of Stock!
               </div>
             )}
@@ -176,7 +172,7 @@ function ProductDetails({ product }) {
 
         {product.attributes?.sizes && (
           <article>
-            <h3 className="font-bold">Size</h3>
+            <h3 className="font-medium">Size</h3>
             <div className="flex flex-wrap max-w-md gap-2 mt-2 text-gray-500">
               {renderSizes}
             </div>
@@ -185,7 +181,7 @@ function ProductDetails({ product }) {
 
         <article>
           <div className="flex gap-4 mt-2">
-            <h3 className="font-bold">Quantity : </h3>
+            <h3 className="font-medium">Quantity : </h3>
             <Counter
               count={quantity}
               onIncrement={increment}
@@ -204,7 +200,7 @@ function ProductDetails({ product }) {
               secondary
               size={"small"}
               className="flex-1 py-3 text-sm rounded-lg active:scale-95"
-              onClick={addToCart}
+              onClick={handleAddingCart}
             >
               Add to Cart
             </Button>

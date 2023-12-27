@@ -4,7 +4,7 @@ import Chip from "./Chip";
 import Panel from "./Panel";
 import useFilter from "../hooks/useFilter";
 
-export default function FilterPanel({ products, subCats, colors, className }) {
+export default function FilterPanel({ products, subCats, colors }) {
   const {
     handleFiltersChange,
     filterValues: {
@@ -64,7 +64,7 @@ export default function FilterPanel({ products, subCats, colors, className }) {
   });
 
   return (
-    <section className={className}>
+    <section className="lg:sticky lg:top-24 w-52">
       <Panel
         title={`${subCats?.data.length > 0 ? "Categories" : "Filter"} `}
         className="p-4 border border-b-0 lg:rounded-t-lg"
@@ -73,10 +73,10 @@ export default function FilterPanel({ products, subCats, colors, className }) {
           renderSubCatsInputs
         ) : (
           <div className="my-2">
-            <Skeleton className={"h-2 my-2"} />
-            <Skeleton className={"w-1/2 h-2 my-2"} />
-            <Skeleton className={"w-1/2 h-2 my-2"} />
-            <Skeleton className={"w-1/2 h-2"} />
+            <Skeleton className="h-3 my-2" />
+            <Skeleton className="w-2/3 h-2 my-2 rounded" />
+            <Skeleton className="w-2/3 h-2 my-2 rounded" />
+            <Skeleton className="w-2/3 h-2 rounded" />
           </div>
         )}
       </Panel>
@@ -112,7 +112,10 @@ export default function FilterPanel({ products, subCats, colors, className }) {
           <ul className={`flex gap-2 flex-wrap`}>{renderColors}</ul>
         </Panel>
       )}
-      <Panel title={"Sort by"} className="p-4 border border-b lg:rounded-b-lg">
+      <Panel
+        title={"Sort by Price"}
+        className="p-4 border border-b lg:rounded-b-lg"
+      >
         <div className="flex items-center gap-2 my-2">
           <input
             type="radio"
@@ -125,7 +128,7 @@ export default function FilterPanel({ products, subCats, colors, className }) {
             className="w-full text-gray-600 cursor-pointer hover:text-gray-800"
             htmlFor="lowest-first"
           >
-            Price ( Lowest First )
+            Lowest First
           </label>
         </div>
         <div className="flex items-center gap-2 my-2">
@@ -140,7 +143,7 @@ export default function FilterPanel({ products, subCats, colors, className }) {
             className="w-full text-gray-600 cursor-pointer hover:text-gray-800"
             htmlFor="highest-first"
           >
-            Price ( Highest First )
+            Highest First
           </label>
         </div>
       </Panel>

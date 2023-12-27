@@ -8,7 +8,9 @@ function Dropdown({ isOpen, hasTitle, className, children, ...rest }) {
     >
       <div className="bg-white lg:border lg:shadow-lg lg:rounded-lg animate-popUp">
         {hasTitle && (
-          <h4 className="p-2 text-gray-600 border-b lg:p-4">{hasTitle}</h4>
+          <h4 className="p-2 font-medium text-gray-600 border-b lg:p-4">
+            {hasTitle}
+          </h4>
         )}
         {children}
       </div>

@@ -3,12 +3,13 @@ import { ProductImage } from "./Product";
 import { formateDate } from "../helper";
 
 const OrderItem = ({ product }) => {
-  const { name, price, images } = product.attributes;
+  const { name, price } = product.attributes;
+  const imageUrl = product?.image.attributes.url;
 
   return (
     <article className="flex gap-4 py-5 text-sm">
       <figure className="w-[60px] h-[60px] overflow-hidden rounded-lg sm:w-32 sm:h-32 shrink-0 ">
-        <ProductImage url={images.data[0].attributes.url} />
+        <ProductImage url={imageUrl || product.images.data[0].attributes.url} />
       </figure>
 
       <div className="flex flex-col flex-1 gap-1 p-4 rounded-md lg:gap-6 lg:p-5 sm:items-center sm:flex-row bg-background-secondary">
@@ -52,21 +53,21 @@ const OrdersList = ({ orders }) => {
 
     let titleBar = (
       <div className="flex items-center justify-between h-20 gap-2 border-y">
-        <h2 className="text-sm">
-          Order Id :{" "}
-          <span className="font-semibold">
-            {order.attributes.stripeId.slice(10, 14)}
-          </span>
-        </h2>
         <p className="text-sm font-semibold">
           <span className="font-normal text-neutral-600">Order date : </span>
           {formateDate(order.attributes.updatedAt.slice(0, 10))}
+        </p>
+        <p className="text-sm">
+          Order Id :{" "}
+          <span className="font-semibold">
+            {order.attributes.stripeId.slice(0, 10)}
+          </span>
         </p>
       </div>
     );
 
     let items = order.attributes.products.map((product) => (
-      <OrderItem key={product.id} product={product} />
+      <OrderItem key={product.color + product.id} product={product} />
     ));
 
     return (

@@ -28,7 +28,8 @@ function Navbar({ openMenu, onClose }) {
       {!link.hasDropdown ? (
         <Link
           to={link.path}
-          className="block p-2 font-medium hover:bg-neutral-100 lg:hover:bg-transparent"
+          onClick={closeDropdown}
+          className="block p-2 rounded hover:bg-slate-100"
         >
           {link.label}
         </Link>
@@ -36,7 +37,7 @@ function Navbar({ openMenu, onClose }) {
         <div {...dropdownEventHandlers()}>
           <button
             onClick={() => setOpenDropdown((prev) => !prev)}
-            className="flex items-center justify-between gap-2 p-2 font-medium rounded-lg cursor-pointer"
+            className="flex items-center justify-between gap-2 p-2 rounded-lg cursor-pointer"
           >
             <span>{link.label}</span>
             <GoChevronDown
@@ -50,7 +51,7 @@ function Navbar({ openMenu, onClose }) {
           </button>
           <NavLinksDropdown
             isOpen={openDropdown}
-            onItemClick={() => setOpenDropdown(false)}
+            onItemClick={closeDropdown}
             className="relative top-0 my-1 lg:pt-4 lg:my-0 lg:absolute lg:top-full"
           />
         </div>
@@ -60,13 +61,12 @@ function Navbar({ openMenu, onClose }) {
 
   return (
     <nav className={`absolute lg:relative h-[56px] flex items-center`}>
-      {/* The menu appear on mobile */}
       <div
         className={`nav-dropdown-wrapper ${
           openMenu
-            ? "opacity-100 translate-y-5 visible transition duration-300"
-            : "opacity-0 -translate-y-full invisible"
-        } lg:opacity-100 lg:translate-y-0 lg:visible`}
+            ? "opacity-100 translate-y-14 transition duration-300"
+            : "opacity-0 -translate-y-full"
+        } lg:opacity-100 lg:translate-y-0`}
       >
         <ul className="p-4 lg:max-w-3xl lg:flex lg:items-center lg:p-0">
           {renderLinks}
@@ -76,7 +76,7 @@ function Navbar({ openMenu, onClose }) {
       {/* Overlay */}
       {openMenu && (
         <div
-          className="fixed inset-0 z-10 opacity-0 bg-black/50 lg:hidden animate-fadeIn"
+          className="fixed inset-0 z-10 lg:hidden"
           onClick={closeDropdown}
         ></div>
       )}

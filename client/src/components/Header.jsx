@@ -1,55 +1,51 @@
 import { useState } from "react";
 import { FiMenu, FiShoppingCart, FiUser, FiX } from "react-icons/fi";
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-
 import logo from "../assets/shopping logo.png";
+import { Link } from "react-router-dom";
+
+// components
+import Button from "./Button";
 import CartList from "./Cart/CartList";
+import Chip from "./Chip";
 import Navbar from "./Nav/Navbar";
 import SearchResults from "./Search/SearchResults";
-import Chip from "./Chip";
-import Button from "./Button";
+
+// hooks
+import { useCartList } from "../hooks/useCartList";
+import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
 function Header() {
   const [openMenu, setOpenMenu] = useState(false);
-  const [openCartList, setOpenCartList] = useState(false);
-  const cartQuantity = useSelector((state) => state.carts.list.length);
 
-  const toggleMenu = () => {
-    setOpenMenu((prev) => !prev);
+  const { cartList, isOpen, dispatch, toggleCart } = useCartList();
+  const cartQuantity = cartList.length;
+
+  const openCartList = () => {
+    dispatch(toggleCart());
   };
-
-  const navigate = useNavigate();
 
   return (
     <header className="sticky top-0 z-10 mb-6 border-b bg-background-primary">
       <div className="flex items-center justify-between p-2 px-5 mx-auto max-w-7xl">
-        <Link to={"/"} className="flex items-center ">
+        <Link to="/" className="flex items-center text-lg font-semibold">
           <img
             src={logo}
-            alt="company logo"
+            alt="shopcart"
             width={32}
             className="invert"
-            title="Company logo"
+            title="Shopcart"
           />
-          <span className="text-lg">ShopCart</span>
+          <span>ShopCart</span>
         </Link>
 
-        <Navbar openMenu={openMenu} onClose={toggleMenu} />
+        <Navbar openMenu={openMenu} onClose={() => setOpenMenu(false)} />
 
         <SearchResults />
 
-        <div className="flex text-gray-600 [&>*]:px-2.5">
+        <div className="flex text-gray-600">
           <Button
-            onClick={() => navigate("/account")}
-            className="hover:text-slate-900"
-          >
-            <FiUser className="text-base" />
-          </Button>
-          <Button
-            className="relative hover:text-slate-900"
-            onClick={() => setOpenCartList(true)}
-            title="cart list"
+            onClick={openCartList}
+            className="relative hover:text-slate-900 lg:mr-4"
           >
             <FiShoppingCart className="text-base" />
             <Chip
@@ -58,14 +54,23 @@ function Header() {
             />
           </Button>
           <Button
-            onClick={toggleMenu}
-            className="block p-2 lg:hidden hover:text-slate-900"
+            onClick={() => setOpenMenu(true)}
+            className="block lg:hidden hover:text-slate-900 focus:ring"
           >
-            {!openMenu ? <FiMenu className="text-base" /> : <FiX />}
+            <FiMenu className="text-base" />
             <span className="sr-only">menu icon</span>
           </Button>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/sign-in" />
+          </SignedIn>
+          <SignedOut>
+            <Link to="/sign-in" className="p-2 hover:text-slate-900">
+              <FiUser className="text-base" />
+            </Link>
+          </SignedOut>
         </div>
-        {<CartList isOpen={openCartList} setIsOpen={setOpenCartList} />}
+
+        <CartList />
       </div>
     </header>
   );

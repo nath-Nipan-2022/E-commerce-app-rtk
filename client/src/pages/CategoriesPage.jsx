@@ -9,7 +9,7 @@ import Skeleton from "../components/Skeleton";
 import Slider from "../components/Slider";
 import { GoFilter } from "react-icons/go";
 import { ProductsListItemSkeleton } from "../components/Product/ProductsListItemSkeleton";
-import NotFoundSvg from "../assets/not_found.svg";
+import NotFoundIcon from "../assets/not_found.webp";
 
 // hooks
 import useFilter from "../hooks/useFilter";
@@ -54,23 +54,22 @@ function CategoriesPage() {
             : "-translate-x-full lg:translate-x-0"
         }`}
       >
-        <FilterPanel
-          products={products}
-          subCats={subCats}
-          colors={colors}
-          className={`lg:sticky lg:top-[72px] w-52`}
-        />
+        <FilterPanel products={products} subCats={subCats} colors={colors} />
       </aside>
       {/* Crucial styles ⭐⭐ */}
       <section className="lg:w-[calc(100%-208px-24px)]">
         <div className="w-full overflow-hidden rounded-lg bg-fuchsia-300 dark:bg-fuchsia-400">
           {isFetching ? (
             <Skeleton className={"w-full h-52 border"} />
-          ) : (
+          ) : !error ? (
             <Slider
               images={products.data[0].attributes.images.data}
               className={"lg:max-h-72"}
             />
+          ) : (
+            <div className="p-8 text-xl font-semibold text-red-600 bg-red-100 rounded-md">
+              Something went wrong. Try to refresh!
+            </div>
           )}
         </div>
         <article className="w-full mx-auto">
@@ -94,14 +93,13 @@ function CategoriesPage() {
             ) : (
               renderCategoryProducts
             )}
-            {error && "Error loading category products"}
           </div>
           {/* If No data found */}
           {filteredProducts?.length === 0 && (
             <div className="h-[344px] w-60 mx-auto">
               <figure>
                 <img
-                  src={NotFoundSvg}
+                  src={NotFoundIcon}
                   alt="not found"
                   width={200}
                   height={300}

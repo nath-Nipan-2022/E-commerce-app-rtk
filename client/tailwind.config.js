@@ -11,7 +11,6 @@ export default {
         "accent-blue": "var(--accent-blue)",
       },
       fontFamily: {
-        Nunito: "Nunito, sans-serif",
         "plus-jakarta-sans": "Plus Jakarta Sans, sans-serif",
       },
       keyframes: {

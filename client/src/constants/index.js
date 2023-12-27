@@ -8,7 +8,7 @@ export const navLinks = [
   {
     id: 2,
     label: "What's New",
-    path: "/whats-new",
+    path: "/",
   },
   {
     id: 3,
