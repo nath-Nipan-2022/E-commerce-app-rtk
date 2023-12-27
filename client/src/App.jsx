@@ -1,54 +1,33 @@
-import { RouterProvider, Outlet, createBrowserRouter } from "react-router-dom";
-import { Home, Account, ErrorPage, ProductView, CategoriesPage,OrdersPage } from "./pages";
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import { Toaster } from "react-hot-toast";
-import { ScrollToTop } from "./helper";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import RootLayout from "./layouts/root-layout";
 
-const Layout = () => {
-  return (
-    <div className="font-plus-jakarta-sans bg-background-primary text-foreground">
-      <Header />
-      <main className="px-6 mx-auto max-w-7xl">
-        <ScrollToTop />
-        <Outlet />
-        <Toaster position="bottom-center" />
-      </main>
-      <Footer />
-    </div>
-  );
-};
+// pages
+import {
+  Home,
+  ErrorPage,
+  Account,
+  CategoriesPage,
+  OrdersPage,
+  ProductView,
+  WishlistPage,
+} from "./pages";
 
 const router = createBrowserRouter([
   {
-    element: <Layout />,
+    element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-      {
-        path: "account",
-        element: <Account />,
-      },
-      {
-        path: "categories/:type",
-        element: <CategoriesPage />,
-      },
-      {
-        path: "products/:id",
-        element: <ProductView />,
-      },
-      {
-        path: "orders",
-        element: <OrdersPage />,
-      },
+      { path: "/", element: <Home /> },
+      { path: "sign-in", element: <Account /> },
+      { path: "categories/:type", element: <CategoriesPage /> },
+      { path: "products/:id", element: <ProductView /> },
+      { path: "orders", element: <OrdersPage /> },
+      { path: "wishlist", element: <WishlistPage /> },
     ],
   },
 ]);
 
 function App() {
-  return <RouterProvider router={router}></RouterProvider>;
+  return <RouterProvider router={router} />;
 }
 export default App;

@@ -1,30 +1,53 @@
-import EmptyCartIcon from "../assets/not_found.svg";
+import { Link } from "react-router-dom";
+import EmptyCartIcon from "../assets/not_found.webp";
 import OrdersList from "../components/OrdersList";
 import Skeleton from "../components/Skeleton";
 import { useGetOrdersQuery } from "../store/apis/ordersApi";
+
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
 
 function OrdersPage() {
   const { data: orders, isLoading } = useGetOrdersQuery();
 
   return (
     <section className="max-w-3xl py-4 mx-auto">
-      <h1 className="pb-4 text-xl font-bold sm:text-center">Order details</h1>
-      {isLoading ? renderSkeletons() : <OrdersList orders={orders.data} />}
-      {orders?.data?.length === 0 && (
-        <div className="h-[250px]">
-          <img
-            src={EmptyCartIcon}
-            alt="empty cart"
-            width={100}
-            height={150}
-            className="w-full h-full"
-          />
-
-          <h3 className="py-2 text-lg font-semibold text-center">
-            You have not ordered yet.
-          </h3>
+      <h2 className="pb-8 text-3xl font-semibold text-center text-slate-700">
+        Orders
+      </h2>
+      <SignedOut>
+        <div className="p-20 rounded-lg bg-slate-50">
+          <div className="grid place-items-center">
+            <h2 className="mb-6 text-2xl font-semibold">
+              You are not signed in.
+            </h2>
+            <Link
+              to="/sign-in"
+              className="flex items-center px-6 py-2.5 text-sm text-white rounded-lg btn-primary"
+            >
+              Sign In Now
+            </Link>
+          </div>
         </div>
-      )}
+      </SignedOut>
+
+      <SignedIn>
+        {isLoading ? renderSkeletons() : <OrdersList orders={orders.data} />}
+        {orders?.data?.length === 0 && (
+          <div className="h-[250px]">
+            <img
+              src={EmptyCartIcon}
+              alt="empty cart"
+              width={100}
+              height={150}
+              className="w-full h-full"
+            />
+
+            <h3 className="py-2 text-lg font-semibold text-center">
+              You have not ordered yet.
+            </h3>
+          </div>
+        )}
+      </SignedIn>
     </section>
   );
 }
