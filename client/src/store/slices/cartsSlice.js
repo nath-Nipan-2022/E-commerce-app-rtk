@@ -2,43 +2,47 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   list: [],
-  // isOpen: false
+  isOpen: false,
+};
+
+const findItem = (item, payload) => {
+  return ["id", "name", "color"].every((key) => item[key] === payload[key]);
 };
 
 const CartsSlice = createSlice({
   name: "carts",
   initialState,
   reducers: {
-    addCart(state, action) {
-      // add a cart
-      // increase quantity if adding repeatedly
-      const hasItem = state.list.find(
-        (item) =>
-          item.name === action.payload.name &&
-          item.color === action.payload.color
-      );
+    addCart(state, { payload }) {
+      const hasItem = state.list.find((item) => findItem(item, payload));
       if (hasItem) {
-        hasItem.quantity = action.payload.quantity || hasItem.quantity + 1;
+        hasItem.quantity = payload.quantity;
       } else {
-        state.list.push({
-          quantity: 1,
-          ...action.payload,
-        });
+        state.list.push(payload);
       }
     },
-    incrementQuantity(state, action) {
-      const hasItem = state.list.find((item) => item.id === action.payload.id);
+
+    incrementQuantity(state, { payload }) {
+      const hasItem = state.list.find((item) => item.id === payload.id);
       hasItem.quantity += 1;
     },
-    decrementQuantity(state, action) {
-      const hasItem = state.list.find((item) => item.id === action.payload.id);
-      hasItem.quantity > 0 ? (hasItem.quantity -= 1) : 0;
+
+    decrementQuantity(state, { payload }) {
+      const hasItem = state.list.find((item) => item.id === payload.id);
+      hasItem.quantity = Math.max(0, hasItem.quantity - 1);
     },
-    removeCart(state, action) {
-      // remove a cart
-      state.list = state.list.filter(({ id }) => id !== action.payload.id);
+
+    removeCart(state, { payload }) {
+      state.list = state.list.filter((item) => !findItem(item, payload));
     },
-    resetCart: () => initialState,
+
+    resetCart: (state) => {
+      state.list = [];
+    },
+
+    toggleCart: (state) => {
+      state.isOpen = !state.isOpen;
+    },
   },
 });
 
@@ -48,5 +52,7 @@ export const {
   incrementQuantity,
   decrementQuantity,
   resetCart,
+  toggleCart,
 } = CartsSlice.actions;
+
 export const CartsReducer = CartsSlice.reducer;
